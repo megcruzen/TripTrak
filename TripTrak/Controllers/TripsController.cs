@@ -56,9 +56,6 @@ namespace TripTrak.Controllers
         // GET: Trips/Create
         public async Task<IActionResult> Create()
         {
-            //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
-            //return View();
-
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
@@ -72,15 +69,6 @@ namespace TripTrak.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,StartDate,EndDate,Summary,Notes,UserId")] Trip trip)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(trip);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", trip.UserId);
-            //return View(trip);
-
             ModelState.Remove("User");
             ModelState.Remove("userId");
             var user = await GetCurrentUserAsync();
@@ -98,7 +86,9 @@ namespace TripTrak.Controllers
         // GET: Trips/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            var user = await GetCurrentUserAsync();
+
+            if (id == null || user == null)
             {
                 return NotFound();
             }
@@ -108,21 +98,52 @@ namespace TripTrak.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", trip.UserId);
+            
             return View(trip);
         }
 
         // POST: Trips/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,Summary,Notes,UserId")] Trip trip)
         {
+            //if (id != trip.Id)
+            //{
+            //    return NotFound();
+            //}
+
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+            //        _context.Update(trip);
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!TripExists(trip.Id))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", trip.UserId);
+            //return View(trip);
+
             if (id != trip.Id)
             {
                 return NotFound();
             }
+
+            ModelState.Remove("User");
+            ModelState.Remove("userId");
+            var user = await GetCurrentUserAsync();
+            trip.UserId = user.Id;
 
             if (ModelState.IsValid)
             {
@@ -144,7 +165,7 @@ namespace TripTrak.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", trip.UserId);
+
             return View(trip);
         }
 

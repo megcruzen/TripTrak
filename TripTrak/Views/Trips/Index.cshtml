@@ -16,14 +16,16 @@
     <h4>
         @Html.DisplayFor(modelItem => item.Name)
     </h4>
-   
+
+    @*<div>@Html.DisplayFor(modelItem => item.Duration)</div>*@
+
     @if (item.StartDate == item.EndDate)
-    {
-    <div>@Html.DisplayFor(modelItem => item.StartDate)</div>
-    }
+        {
+        <div>@Html.DisplayFor(modelItem => item.StartDate)</div>
+        }
     else
     {
-    <div>@Html.DisplayFor(modelItem => item.StartDate) - @Html.DisplayFor(modelItem => item.EndDate)</div>
+        <div>@Html.DisplayFor(modelItem => item.StartDate) - @Html.DisplayFor(modelItem => item.EndDate)</div>
     };
 
     <div>

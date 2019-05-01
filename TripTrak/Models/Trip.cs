@@ -22,6 +22,26 @@ namespace TripTrak.Models
         [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        public string Duration
+        {
+            get
+            {
+                if (StartDate == EndDate)
+                {
+                    return $"{StartDate}";
+                }
+                if (StartDate == null)
+                {
+                    return "TBD";
+                }
+                else
+                {
+                    return $"{StartDate} - {EndDate}";
+                };
+            }
+        }
+
         public string Summary { get; set; }
         public string Notes { get; set; }
 

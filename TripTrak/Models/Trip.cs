@@ -14,7 +14,12 @@ namespace TripTrak.Models
         [Required]
         public string Name { get; set; }
 
+        [DisplayFormat(DataFormatString= "{0:MM/dd/yyyy}")]
+        [Display(Name = "Start Date")]
         public DateTime? StartDate { get; set; }
+
+        [DisplayFormat(DataFormatString= "{0:MM/dd/yyyy}")]
+        [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
 
         public string Summary { get; set; }
@@ -24,5 +29,8 @@ namespace TripTrak.Models
         public string UserId { get; set; }
         
         public ApplicationUser User { get; set; }
+
+        public List<City> Cities { get; set; } = new List<City>();
+
     }
 }

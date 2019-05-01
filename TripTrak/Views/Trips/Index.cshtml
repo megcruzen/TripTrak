@@ -4,13 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>My Trips</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add Trip</a>
 </p>
-<table class="table">
-    <thead>
+@*<thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -27,39 +26,34 @@
             <th>
                 @Html.DisplayNameFor(model => model.Notes)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Summary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+    </thead>*@
+
+@foreach (var item in Model)
+{
+    <hr />
+    <h4>
+        @Html.DisplayFor(modelItem => item.Name)
+    </h4>
+    <div>
+        @Html.DisplayFor(modelItem => item.StartDate) - @Html.DisplayFor(modelItem => item.EndDate)
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+    </div>
+    <div>
+        @Html.DisplayFor(modelItem => item.Notes)
+    </div>
+    <div>
+        @foreach (var city in item.Cities)
+        {
+            <div>
+                <a asp-controller="Cities" asp-action="Details" asp-route-id="@city.Id">@Html.DisplayFor(modelItem => city.Name)</a>
+            </div>
+            <div>
+                @Html.DisplayFor(modelItem => city.StartDate) - @Html.DisplayFor(modelItem => city.EndDate)
+            </div>
+        }
+    </div>
 }
-    </tbody>
-</table>

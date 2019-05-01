@@ -24,6 +24,7 @@ namespace TripTrak.Models
         [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
 
+        [Display(Name = "Website")]
         public string PlaceUrl { get; set; }
         public string Notes { get; set; }
         public bool Favorite { get; set; }

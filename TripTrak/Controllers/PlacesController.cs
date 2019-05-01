@@ -51,10 +51,23 @@ namespace TripTrak.Controllers
         //}
 
         // GET: Places/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int cityId)
         {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var place = new Place();
+            place.CityId = cityId;
+
+            City city = await _context.City
+                .FirstOrDefaultAsync(m => m.Id == cityId);
+            place.City = city;
+
             ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name");
-            return View();
+            return View(place);
         }
 
         // POST: Places/Create
@@ -62,11 +75,16 @@ namespace TripTrak.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Location,StartDate,EndDate,PlaceUrl,Notes,Favorite,SubcategoryId,CityId,UserId")] Place place)
         {
+            ModelState.Remove("User");
+            ModelState.Remove("userId");
+            var user = await GetCurrentUserAsync();
+            place.UserId = user.Id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(place);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Cities", new { id = place.CityId });
             }
             ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name", place.SubcategoryId);
             return View(place);

@@ -83,7 +83,6 @@ namespace TripTrak.Controllers
             {
                 _context.Add(city);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
                 return RedirectToAction("Details", "Trips", new { id = city.TripId });
             }
             return View(city);

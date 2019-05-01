@@ -66,24 +66,6 @@ namespace TripTrak.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "City",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: true),
-                    EndDate = table.Column<DateTime>(nullable: true),
-                    ImageUrl = table.Column<string>(nullable: true),
-                    Notes = table.Column<string>(nullable: true),
-                    TripId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_City", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -235,6 +217,31 @@ namespace TripTrak.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "City",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: true),
+                    EndDate = table.Column<DateTime>(nullable: true),
+                    ImageUrl = table.Column<string>(nullable: true),
+                    Notes = table.Column<string>(nullable: true),
+                    TripId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_City", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_City_Trip_TripId",
+                        column: x => x.TripId,
+                        principalTable: "Trip",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Place",
                 columns: table => new
                 {
@@ -254,6 +261,12 @@ namespace TripTrak.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Place", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Place_City_CityId",
+                        column: x => x.CityId,
+                        principalTable: "City",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Place_Subcategory_SubcategoryId",
                         column: x => x.SubcategoryId,
@@ -292,7 +305,7 @@ namespace TripTrak.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "DisplayName", "FirstName", "LastName" },
-                values: new object[] { "860f7f70-cff0-4b4c-82a5-a881583b160f", 0, "c555d6dc-0912-4cfb-8a3b-d50c8747d7c3", "ApplicationUser", "megcruzen@gmail.com", true, false, null, "megcruzen@gmail.com", "MEGCRUZEN@GMAIL.COM", "AQAAAAEAACcQAAAAEGbfbJ9zHTFZDS8i2KsJKO2k8RAq7dqz0rsFbQpuVSoxnd4Iuqy6ShInvcDfaKXQXQ==", null, false, "c727ee8b-cc37-481f-8344-f5f5e90dd534", false, "megcruzen@gmail.com", "megcruzen", "Megan", "Cruzen" });
+                values: new object[] { "8f0b85b8-52a8-4bf3-a362-7241c4823900", 0, "fc4a0f2f-45a0-4f73-bfcd-e317a129d259", "ApplicationUser", "megcruzen@gmail.com", true, false, null, "megcruzen@gmail.com", "MEGCRUZEN@GMAIL.COM", "AQAAAAEAACcQAAAAEAakz1GXXoUeYTYFNCk3YfbofWVt9mqImuaiRO3KEEhi7A5ZEWtZ5qAUddyY5/7KsQ==", null, false, "eb149973-e815-4811-949a-b42a04c56dc2", false, "megcruzen@gmail.com", "megcruzen", "Megan", "Cruzen" });
 
             migrationBuilder.InsertData(
                 table: "Category",
@@ -302,16 +315,6 @@ namespace TripTrak.Migrations
                     { 1, "", "Eat" },
                     { 2, "", "Stay" },
                     { 3, "", "Do" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "City",
-                columns: new[] { "Id", "EndDate", "ImageUrl", "Name", "Notes", "StartDate", "TripId" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "Munich, Germany", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "Lake Thun, Switzerland", "AMAZING!", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { 3, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "Seattle, WA", "", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -341,19 +344,34 @@ namespace TripTrak.Migrations
                 columns: new[] { "Id", "EndDate", "Name", "Notes", "StartDate", "Summary", "UserId" },
                 values: new object[,]
                 {
-                    { 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Alaskan Cruise + Oregon Coast", "Holland America Eurodam, Amanda's Wedding", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Alaskan Cruise (Juneau, Glacier Bay, Sitka, Ketchikan), Oregon Coast, Seattle", "860f7f70-cff0-4b4c-82a5-a881583b160f" },
-                    { 1, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Honeymoon", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Munich, Lake Thun, Venice, Cinque Terre, Rome", "860f7f70-cff0-4b4c-82a5-a881583b160f" }
+                    { 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Alaskan Cruise + Oregon Coast", "Holland America Eurodam, Amanda's Wedding", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Alaskan Cruise (Juneau, Glacier Bay, Sitka, Ketchikan), Oregon Coast, Seattle", "8f0b85b8-52a8-4bf3-a362-7241c4823900" },
+                    { 1, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Honeymoon", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Munich, Lake Thun, Venice, Cinque Terre, Rome", "8f0b85b8-52a8-4bf3-a362-7241c4823900" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "City",
+                columns: new[] { "Id", "EndDate", "ImageUrl", "Name", "Notes", "StartDate", "TripId", "UserId" },
+                values: new object[] { 1, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "Munich, Germany", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "8f0b85b8-52a8-4bf3-a362-7241c4823900" });
+
+            migrationBuilder.InsertData(
+                table: "City",
+                columns: new[] { "Id", "EndDate", "ImageUrl", "Name", "Notes", "StartDate", "TripId", "UserId" },
+                values: new object[] { 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "Lake Thun, Switzerland", "AMAZING!", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "8f0b85b8-52a8-4bf3-a362-7241c4823900" });
+
+            migrationBuilder.InsertData(
+                table: "City",
+                columns: new[] { "Id", "EndDate", "ImageUrl", "Name", "Notes", "StartDate", "TripId", "UserId" },
+                values: new object[] { 3, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "Seattle, WA", "", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "8f0b85b8-52a8-4bf3-a362-7241c4823900" });
 
             migrationBuilder.InsertData(
                 table: "Place",
                 columns: new[] { "Id", "CityId", "EndDate", "Favorite", "Location", "Name", "Notes", "PlaceUrl", "StartDate", "SubcategoryId", "UserId" },
                 values: new object[,]
                 {
-                    { 4, 2, new DateTime(2017, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Marktgasse 2, 3600 Thun", "Trans Asien Restaurant", "Way too expensive!", "", new DateTime(2017, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "860f7f70-cff0-4b4c-82a5-a881583b160f" },
-                    { 1, 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Schlossberg 1, 3600 Thun", "Thun Castle", "Absolutely fabulous.", "https://schlossthun.ch/?lang=en", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 8, "860f7f70-cff0-4b4c-82a5-a881583b160f" },
-                    { 2, 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Schloss 4, 3653 Oberhofen am Thunersee", "Oberhofen Castle", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.", "https://www.schlossoberhofen.ch/en/home", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 12, "860f7f70-cff0-4b4c-82a5-a881583b160f" },
-                    { 3, 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Seestrasse 974, 3800 Sundlauenen", "St. Beatus Caves", "Cost: CHF 18", "http://www.beatushoehlen.swiss/en/", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 14, "860f7f70-cff0-4b4c-82a5-a881583b160f" }
+                    { 1, 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Schlossberg 1, 3600 Thun", "Thun Castle", "Absolutely fabulous.", "https://schlossthun.ch/?lang=en", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 8, "8f0b85b8-52a8-4bf3-a362-7241c4823900" },
+                    { 2, 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Schloss 4, 3653 Oberhofen am Thunersee", "Oberhofen Castle", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.", "https://www.schlossoberhofen.ch/en/home", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 12, "8f0b85b8-52a8-4bf3-a362-7241c4823900" },
+                    { 3, 2, new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Seestrasse 974, 3800 Sundlauenen", "St. Beatus Caves", "Cost: CHF 18", "http://www.beatushoehlen.swiss/en/", new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 14, "8f0b85b8-52a8-4bf3-a362-7241c4823900" },
+                    { 4, 2, new DateTime(2017, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Marktgasse 2, 3600 Thun", "Trans Asien Restaurant", "Way too expensive!", "", new DateTime(2017, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "8f0b85b8-52a8-4bf3-a362-7241c4823900" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -394,6 +412,16 @@ namespace TripTrak.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_City_TripId",
+                table: "City",
+                column: "TripId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Place_CityId",
+                table: "Place",
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Place_SubcategoryId",
@@ -439,13 +467,7 @@ namespace TripTrak.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "City");
-
-            migrationBuilder.DropTable(
                 name: "SavedPlace");
-
-            migrationBuilder.DropTable(
-                name: "Trip");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -454,13 +476,19 @@ namespace TripTrak.Migrations
                 name: "Place");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "City");
 
             migrationBuilder.DropTable(
                 name: "Subcategory");
 
             migrationBuilder.DropTable(
+                name: "Trip");
+
+            migrationBuilder.DropTable(
                 name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

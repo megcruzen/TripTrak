@@ -17,12 +17,11 @@
         @Html.DisplayFor(modelItem => item.Name)
     </h4>
 
-    @*<div>@Html.DisplayFor(modelItem => item.Duration)</div>*@
 
     @if (item.StartDate == item.EndDate)
-        {
+    {
         <div>@Html.DisplayFor(modelItem => item.StartDate)</div>
-        }
+    }
     else
     {
         <div>@Html.DisplayFor(modelItem => item.StartDate) - @Html.DisplayFor(modelItem => item.EndDate)</div>
@@ -35,6 +34,7 @@
     <div>
         @Html.DisplayFor(modelItem => item.Notes)
     </div>
+    <div><a asp-controller="Cities" asp-action="Create" asp-route-tripId="@item.Id">Add City</a></div>
     <div>
         @foreach (var city in item.Cities)
         {

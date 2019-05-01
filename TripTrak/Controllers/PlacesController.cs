@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,29 +10,23 @@ using TripTrak.Models;
 
 namespace TripTrak.Controllers
 {
-    public class TripsController : Controller
+    public class PlacesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TripsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public PlacesController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
-        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
-
-        // GET: Trips
+        // GET: Places
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Trip
-                .Include(t => t.User)
-                .Include(t => t.Cities);
+            var applicationDbContext = _context.Place.Include(p => p.Subcategory);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Trips/Details/5
+        // GET: Places/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -41,93 +34,80 @@ namespace TripTrak.Controllers
                 return NotFound();
             }
 
-            var trip = await _context.Trip
-                .Include(t => t.User)
-                .Include(t => t.Cities)
+            var place = await _context.Place
+                .Include(p => p.Subcategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (trip == null)
+            if (place == null)
             {
                 return NotFound();
             }
 
-            return View(trip);
+            return View(place);
         }
 
-        // GET: Trips/Create
-        public async Task<IActionResult> Create()
+        // GET: Places/Create
+        public IActionResult Create()
         {
-            var user = await GetCurrentUserAsync();
-            if (user == null)
-            {
-                return NotFound();
-            }
+            ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name");
             return View();
         }
 
-        // POST: Trips/Create
+        // POST: Places/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,StartDate,EndDate,Summary,Notes,UserId")] Trip trip)
+        public async Task<IActionResult> Create([Bind("Id,Name,Location,StartDate,EndDate,PlaceUrl,Notes,Favorite,SubcategoryId,CityId,UserId")] Place place)
         {
-            ModelState.Remove("User");
-            ModelState.Remove("userId");
-            var user = await GetCurrentUserAsync();
-            trip.UserId = user.Id;
-
             if (ModelState.IsValid)
             {
-                _context.Add(trip);
+                _context.Add(place);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(trip);
+            ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name", place.SubcategoryId);
+            return View(place);
         }
 
-        // GET: Trips/Edit/5
+        // GET: Places/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            var user = await GetCurrentUserAsync();
-
-            if (id == null || user == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var trip = await _context.Trip.FindAsync(id);
-            if (trip == null)
+            var place = await _context.Place.FindAsync(id);
+            if (place == null)
             {
                 return NotFound();
             }
-            
-            return View(trip);
+            ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name", place.SubcategoryId);
+            return View(place);
         }
 
-        // POST: Trips/Edit/5
+        // POST: Places/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,Summary,Notes,UserId")] Trip trip)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Location,StartDate,EndDate,PlaceUrl,Notes,Favorite,SubcategoryId,CityId,UserId")] Place place)
         {
-            if (id != trip.Id)
+            if (id != place.Id)
             {
                 return NotFound();
             }
-
-            ModelState.Remove("User");
-            ModelState.Remove("userId");
-            var user = await GetCurrentUserAsync();
-            trip.UserId = user.Id;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(trip);
+                    _context.Update(place);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TripExists(trip.Id))
+                    if (!PlaceExists(place.Id))
                     {
                         return NotFound();
                     }
@@ -138,11 +118,11 @@ namespace TripTrak.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(trip);
+            ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name", place.SubcategoryId);
+            return View(place);
         }
 
-        // GET: Trips/Delete/5
+        // GET: Places/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -150,31 +130,31 @@ namespace TripTrak.Controllers
                 return NotFound();
             }
 
-            var trip = await _context.Trip
-                .Include(t => t.User)
+            var place = await _context.Place
+                .Include(p => p.Subcategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (trip == null)
+            if (place == null)
             {
                 return NotFound();
             }
 
-            return View(trip);
+            return View(place);
         }
 
-        // POST: Trips/Delete/5
+        // POST: Places/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var trip = await _context.Trip.FindAsync(id);
-            _context.Trip.Remove(trip);
+            var place = await _context.Place.FindAsync(id);
+            _context.Place.Remove(place);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TripExists(int id)
+        private bool PlaceExists(int id)
         {
-            return _context.Trip.Any(e => e.Id == id);
+            return _context.Place.Any(e => e.Id == id);
         }
     }
 }

@@ -4,45 +4,62 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@*@Html.DisplayFor(model => model.ImageUrl)*@
+
+<h1>@Html.DisplayFor(model => model.Name)</h1> <h5>(@Html.DisplayFor(model => model.Trip.Name))</h5>
+
+
+@if (Model.StartDate == Model.EndDate)
+{
+    <div>@Html.DisplayFor(model => model.StartDate)</div>
+}
+else
+{
+    <div>@Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate)</div>
+}
+<div>
+    @Html.DisplayFor(model => model.Notes)
+</div>
 
 <div>
-    <h4>City</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
-    </dl>
-</div>
-<div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
+    <a asp-action="Index">Back to Trips</a>
 </div>
+
+<div><a asp-controller="Places" asp-action="Create">Add Place</a></div>
+
+@foreach (var place in Model.Places)
+{
+    <hr />
+    <h4>@Html.DisplayFor(modelItem => place.Name)</h4>
+
+    @if (place.StartDate == place.EndDate)
+    {
+        <div><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate)</div>
+    }
+    else
+    {
+        <div><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate) - @Html.DisplayFor(modelItem => place.EndDate)</div>
+    };
+
+    <div><strong>Location:</strong> @Html.DisplayFor(modelItem => place.Location)</div>
+
+    @if (place.PlaceUrl != "")
+    {
+        <div><strong>URL:</strong> <a href="@place.PlaceUrl">@Html.DisplayFor(modelItem => place.PlaceUrl)</a></div>
+    }
+
+    <div><strong>Notes:</strong> @Html.DisplayFor(modelItem => place.Notes)</div>
+
+    @if (place.Favorite == true)
+    {
+        <div class="text-warning">Favorite!</div>
+    }
+
+        <div>
+            <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id">Edit</a>
+            <br />
+            <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id">Delete</a>
+        </div>
+}

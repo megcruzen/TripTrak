@@ -85,7 +85,8 @@ namespace TripTrak.Data
                     EndDate = new DateTime(2017, 06, 09),
                     ImageUrl = "",
                     Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.",
-                    TripId = 1
+                    TripId = 1,
+                    UserId = user.Id
                 },
                 new City()
                 {
@@ -95,7 +96,8 @@ namespace TripTrak.Data
                     EndDate = new DateTime(2017, 06, 09),
                     ImageUrl = "",
                     Notes = "AMAZING!",
-                    TripId = 1
+                    TripId = 1,
+                    UserId = user.Id
                 },
                 new City()
                 {
@@ -105,7 +107,8 @@ namespace TripTrak.Data
                     EndDate = new DateTime(2017, 06, 09),
                     ImageUrl = "",
                     Notes = "",
-                    TripId = 2
+                    TripId = 2,
+                    UserId = user.Id
                 }
             );
 

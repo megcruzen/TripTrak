@@ -14,11 +14,11 @@ namespace TripTrak.Models
         [Required]
         public string Name { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:MMM d, yyyy}")]
         [Display(Name = "Start Date")]
         public DateTime? StartDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:MMM d, yyyy}")]
         [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
 
@@ -29,6 +29,10 @@ namespace TripTrak.Models
 
         [Required]
         public int TripId { get; set; }
+        public Trip Trip { get; set; }
+        
+        [Required]
+        public string UserId { get; set; }
 
         public List<Place> Places { get; set; } = new List<Place>();
     }

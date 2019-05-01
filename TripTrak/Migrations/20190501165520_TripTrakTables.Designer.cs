@@ -10,7 +10,7 @@ using TripTrak.Data;
 namespace TripTrak.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190430210955_TripTrakTables")]
+    [Migration("20190501165520_TripTrakTables")]
     partial class TripTrakTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -246,7 +246,12 @@ namespace TripTrak.Migrations
 
                     b.Property<int>("TripId");
 
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TripId");
 
                     b.ToTable("City");
 
@@ -259,7 +264,8 @@ namespace TripTrak.Migrations
                             Name = "Munich, Germany",
                             Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.",
                             StartDate = new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TripId = 1
+                            TripId = 1,
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         },
                         new
                         {
@@ -269,7 +275,8 @@ namespace TripTrak.Migrations
                             Name = "Lake Thun, Switzerland",
                             Notes = "AMAZING!",
                             StartDate = new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TripId = 1
+                            TripId = 1,
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         },
                         new
                         {
@@ -279,7 +286,8 @@ namespace TripTrak.Migrations
                             Name = "Seattle, WA",
                             Notes = "",
                             StartDate = new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TripId = 2
+                            TripId = 2,
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         });
                 });
 
@@ -313,6 +321,8 @@ namespace TripTrak.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CityId");
+
                     b.HasIndex("SubcategoryId");
 
                     b.ToTable("Place");
@@ -330,7 +340,7 @@ namespace TripTrak.Migrations
                             PlaceUrl = "https://schlossthun.ch/?lang=en",
                             StartDate = new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SubcategoryId = 8,
-                            UserId = "860f7f70-cff0-4b4c-82a5-a881583b160f"
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         },
                         new
                         {
@@ -344,7 +354,7 @@ namespace TripTrak.Migrations
                             PlaceUrl = "https://www.schlossoberhofen.ch/en/home",
                             StartDate = new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SubcategoryId = 12,
-                            UserId = "860f7f70-cff0-4b4c-82a5-a881583b160f"
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         },
                         new
                         {
@@ -358,7 +368,7 @@ namespace TripTrak.Migrations
                             PlaceUrl = "http://www.beatushoehlen.swiss/en/",
                             StartDate = new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SubcategoryId = 14,
-                            UserId = "860f7f70-cff0-4b4c-82a5-a881583b160f"
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         },
                         new
                         {
@@ -372,7 +382,7 @@ namespace TripTrak.Migrations
                             PlaceUrl = "",
                             StartDate = new DateTime(2017, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SubcategoryId = 1,
-                            UserId = "860f7f70-cff0-4b4c-82a5-a881583b160f"
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         });
                 });
 
@@ -559,7 +569,7 @@ namespace TripTrak.Migrations
                             Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam nisi, laoreet nec laoreet id, faucibus in nisi. Aliquam varius tincidunt finibus. Cras pharetra, nulla mattis pulvinar lobortis, orci massa mattis justo, quis lobortis nunc nisi nec orci.",
                             StartDate = new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Summary = "Munich, Lake Thun, Venice, Cinque Terre, Rome",
-                            UserId = "860f7f70-cff0-4b4c-82a5-a881583b160f"
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         },
                         new
                         {
@@ -569,7 +579,7 @@ namespace TripTrak.Migrations
                             Notes = "Holland America Eurodam, Amanda's Wedding",
                             StartDate = new DateTime(2017, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Summary = "Alaskan Cruise (Juneau, Glacier Bay, Sitka, Ketchikan), Oregon Coast, Seattle",
-                            UserId = "860f7f70-cff0-4b4c-82a5-a881583b160f"
+                            UserId = "8f0b85b8-52a8-4bf3-a362-7241c4823900"
                         });
                 });
 
@@ -591,17 +601,17 @@ namespace TripTrak.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "860f7f70-cff0-4b4c-82a5-a881583b160f",
+                            Id = "8f0b85b8-52a8-4bf3-a362-7241c4823900",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c555d6dc-0912-4cfb-8a3b-d50c8747d7c3",
+                            ConcurrencyStamp = "fc4a0f2f-45a0-4f73-bfcd-e317a129d259",
                             Email = "megcruzen@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "megcruzen@gmail.com",
                             NormalizedUserName = "MEGCRUZEN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGbfbJ9zHTFZDS8i2KsJKO2k8RAq7dqz0rsFbQpuVSoxnd4Iuqy6ShInvcDfaKXQXQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAakz1GXXoUeYTYFNCk3YfbofWVt9mqImuaiRO3KEEhi7A5ZEWtZ5qAUddyY5/7KsQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c727ee8b-cc37-481f-8344-f5f5e90dd534",
+                            SecurityStamp = "eb149973-e815-4811-949a-b42a04c56dc2",
                             TwoFactorEnabled = false,
                             UserName = "megcruzen@gmail.com",
                             DisplayName = "megcruzen",
@@ -655,8 +665,21 @@ namespace TripTrak.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("TripTrak.Models.City", b =>
+                {
+                    b.HasOne("TripTrak.Models.Trip", "Trip")
+                        .WithMany("Cities")
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("TripTrak.Models.Place", b =>
                 {
+                    b.HasOne("TripTrak.Models.City")
+                        .WithMany("Places")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("TripTrak.Models.Subcategory", "Subcategory")
                         .WithMany()
                         .HasForeignKey("SubcategoryId")

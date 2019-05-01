@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,15 @@ namespace TripTrak.Controllers
     public class CitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CitiesController(ApplicationDbContext context)
+        public CitiesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Cities
         public async Task<IActionResult> Index()
@@ -34,6 +39,8 @@ namespace TripTrak.Controllers
             }
 
             var city = await _context.City
+                .Include(c => c.Trip)
+                .Include(c => c.Places)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (city == null)
             {
@@ -44,23 +51,40 @@ namespace TripTrak.Controllers
         }
 
         // GET: Cities/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int tripId)
         {
-            return View();
+            var city = new City();
+            city.TripId = tripId;
+
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            Trip trip = await _context.Trip
+                .FirstOrDefaultAsync(m => m.Id == tripId);
+            city.Trip = trip;
+
+            return View(city);
         }
 
         // POST: Cities/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,StartDate,EndDate,ImageUrl,Notes,TripId")] City city)
         {
+            ModelState.Remove("User");
+            ModelState.Remove("userId");
+            var user = await GetCurrentUserAsync();
+            city.UserId = user.Id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(city);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Trips", new { id = city.TripId });
             }
             return View(city);
         }
@@ -68,7 +92,9 @@ namespace TripTrak.Controllers
         // GET: Cities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            var user = await GetCurrentUserAsync();
+
+            if (id == null || user == null)
             {
                 return NotFound();
             }
@@ -82,8 +108,6 @@ namespace TripTrak.Controllers
         }
 
         // POST: Cities/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,ImageUrl,Notes,TripId")] City city)
@@ -92,6 +116,11 @@ namespace TripTrak.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("User");
+            ModelState.Remove("userId");
+            var user = await GetCurrentUserAsync();
+            city.UserId = user.Id;
 
             if (ModelState.IsValid)
             {
@@ -111,7 +140,7 @@ namespace TripTrak.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Trips", new { id = city.TripId });
             }
             return View(city);
         }
@@ -126,6 +155,10 @@ namespace TripTrak.Controllers
 
             var city = await _context.City
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            Trip trip = await _context.Trip
+                .FirstOrDefaultAsync(m => m.Id == city.TripId);
+
             if (city == null)
             {
                 return NotFound();
@@ -142,7 +175,8 @@ namespace TripTrak.Controllers
             var city = await _context.City.FindAsync(id);
             _context.City.Remove(city);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Trips", new { id = city.TripId });
         }
 
         private bool CityExists(int id)

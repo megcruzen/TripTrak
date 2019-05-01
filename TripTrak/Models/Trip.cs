@@ -14,8 +14,33 @@ namespace TripTrak.Models
         [Required]
         public string Name { get; set; }
 
+        [DisplayFormat(DataFormatString= "{0:MM/dd/yyyy}")]
+        [Display(Name = "Start Date")]
         public DateTime? StartDate { get; set; }
+
+        [DisplayFormat(DataFormatString= "{0:MM/dd/yyyy}")]
+        [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        public string Duration
+        {
+            get
+            {
+                if (StartDate == EndDate)
+                {
+                    return $"{StartDate}";
+                }
+                if (StartDate == null)
+                {
+                    return "TBD";
+                }
+                else
+                {
+                    return $"{StartDate} - {EndDate}";
+                };
+            }
+        }
 
         public string Summary { get; set; }
         public string Notes { get; set; }
@@ -24,5 +49,8 @@ namespace TripTrak.Models
         public string UserId { get; set; }
         
         public ApplicationUser User { get; set; }
+
+        public List<City> Cities { get; set; } = new List<City>();
+
     }
 }

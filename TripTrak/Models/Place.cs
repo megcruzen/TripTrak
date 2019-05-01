@@ -15,8 +15,15 @@ namespace TripTrak.Models
         public string Name { get; set; }
 
         public string Location { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [Display(Name = "Start Date")]
         public DateTime? StartDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
+
         public string PlaceUrl { get; set; }
         public string Notes { get; set; }
         public bool Favorite { get; set; }

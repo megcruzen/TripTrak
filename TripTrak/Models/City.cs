@@ -14,13 +14,22 @@ namespace TripTrak.Models
         [Required]
         public string Name { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [Display(Name = "Start Date")]
         public DateTime? StartDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
 
+        [Display(Name = "Image URL")]
         public string ImageUrl { get; set; }
+
         public string Notes { get; set; }
 
         [Required]
         public int TripId { get; set; }
+
+        public List<Place> Places { get; set; } = new List<Place>();
     }
 }

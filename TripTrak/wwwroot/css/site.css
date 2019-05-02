@@ -54,3 +54,29 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+
+/* Layout
+-------------------------------------------------- */
+
+.date {
+    font-size: 13px;
+}
+
+.trip_card {
+    background-color: #eeeeee;
+}
+
+.small_links {
+    font-size: 10px;
+}
+
+.city_card {
+    border: 1px solid #999;
+    margin: 10px;
+}
+
+    .city_card a {
+        color: #212529;
+        text-decoration: none;
+    }

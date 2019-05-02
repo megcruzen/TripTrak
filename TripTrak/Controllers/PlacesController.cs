@@ -69,7 +69,36 @@ namespace TripTrak.Controllers
             place.City = city;
 
             ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name");
+
+            List<Category> categoryList = new List<Category>();
+
+            // ------- Get Data -------
+            categoryList = (from category in _context.Category
+                            select category).ToList();
+
+            // ------- Insert Select Item in List -------
+            categoryList.Insert(0, new Category { Id = 0, Name = "Select" });
+
+            // ------- Assign categoryList to ViewBag.ListofCategory -------
+            ViewBag.ListofCategory = categoryList;
+            //return View();
+
             return View(place);
+        }
+        
+        public JsonResult GetSubcategory(int CategoryId)
+        {
+            List<Subcategory> subcategoryList = new List<Subcategory>();
+
+            // ------- Get Data -------
+            subcategoryList = (from subcategory in _context.Subcategory
+                               where subcategory.CategoryId == CategoryId
+                               select subcategory).ToList();
+
+            // ------- Insert Select Item in List -------
+            subcategoryList.Insert(0, new Subcategory { Id = 0, Name = "Select" });
+            
+            return Json(new SelectList(subcategoryList, "Id", "Name"));
         }
 
         // POST: Places/Create

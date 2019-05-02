@@ -24,17 +24,19 @@ namespace TripTrak.Models
         [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
 
+        [Display(Name = "Website")]
         public string PlaceUrl { get; set; }
         public string Notes { get; set; }
         public bool Favorite { get; set; }
 
         [Required]
-        public int SubcategoryId { get; set; }
         [Display(Name = "Subcategory")]
+        public int SubcategoryId { get; set; }
         public Subcategory Subcategory { get; set; }
 
         [Required]
         public int CityId { get; set; }
+        public City City { get; set; }
 
         [Required]
         public string UserId { get; set; }

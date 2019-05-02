@@ -4,13 +4,39 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<script src="/lib/jquery/dist/jquery.js"></script>
 
-<h4>Place</h4>
+<script type="text/javascript">
+        $(document).ready(function () {
+            var items = "<option value='0'>Select</option>";
+            $('#SubcategoryId').html(items);
+        });
+</script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#CategoryId').change(function () {
+                var url = '@Url.Content("~/")' + "Places/GetSubcategory?CategoryId=" + $('#CategoryId').val();
+                var ddlsource = "#CategoryId";
+                $.getJSON(url, { CategoryId: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#SubcategoryId").empty();
+                    $.each(data, function (i, subcategory) {
+                        items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
+                    });
+                    $('#SubcategoryId').html(items);
+                });
+            });
+        });
+</script>
+
+<h1>@Model.City.Name</h1>
+
+<h4>Add Place</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" asp-route-cityId="@Model.CityId">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -24,12 +50,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
+                <input asp-for="StartDate" class="form-control" type="date" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
+                <input asp-for="EndDate" class="form-control" type="date" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -39,7 +65,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Notes" class="control-label"></label>
-                <input asp-for="Notes" class="form-control" />
+                <textarea asp-for="Notes" class="form-control"></textarea>
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -48,17 +74,13 @@
                 </label>
             </div>
             <div class="form-group">
+                <label class="control-label">Category</label>
+                <select id="CategoryId" class="form-control" asp-items="@(new SelectList(@ViewBag.ListofCategory,"Id", "Name"))"></select>
+            </div>
+            <div class="form-group">
                 <label asp-for="SubcategoryId" class="control-label"></label>
-                <select asp-for="SubcategoryId" class ="form-control" asp-items="ViewBag.SubcategoryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" class ="form-control" asp-items="ViewBag.CityId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
-                <span asp-validation-for="UserId" class="text-danger"></span>
+                <select asp-for="SubcategoryId" class="form-control" id="SubcategoryId" name="SubcategoryId"
+                        asp-items="@(new SelectList(string.Empty,"Id", "Name"))"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

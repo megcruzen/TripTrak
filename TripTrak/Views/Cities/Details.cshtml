@@ -6,7 +6,7 @@
 
 @*@Html.DisplayFor(model => model.ImageUrl)*@
 
-<h1>@Html.DisplayFor(model => model.Name)</h1> <h5>(@Html.DisplayFor(model => model.Trip.Name))</h5>
+<h1>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.Trip.Name))</h1>
 
 
 @if (Model.StartDate == Model.EndDate)
@@ -27,7 +27,7 @@ else
     <a asp-action="Index">Back to Trips</a>
 </div>
 
-<div><a asp-controller="Places" asp-action="Create">Add Place</a></div>
+<div><a asp-controller="Places" asp-action="Create" asp-route-cityId="@Model.Id">Add Place</a></div>
 
 @foreach (var place in Model.Places)
 {
@@ -45,7 +45,7 @@ else
 
     <div><strong>Location:</strong> @Html.DisplayFor(modelItem => place.Location)</div>
 
-    @if (place.PlaceUrl != "")
+    @if (place.PlaceUrl != null)
     {
         <div><strong>URL:</strong> <a href="@place.PlaceUrl">@Html.DisplayFor(modelItem => place.PlaceUrl)</a></div>
     }

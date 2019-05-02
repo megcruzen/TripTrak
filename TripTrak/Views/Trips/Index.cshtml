@@ -12,43 +12,56 @@
 
 @foreach (var item in Model)
 {
+<div class="trip_card">
     <hr />
-    <h4>
-        @Html.DisplayFor(modelItem => item.Name)
-    </h4>
-
-
-    @if (item.StartDate == item.EndDate)
-    {
-        <div>@Html.DisplayFor(modelItem => item.StartDate)</div>
-    }
-    else
-    {
-        <div>@Html.DisplayFor(modelItem => item.StartDate) - @Html.DisplayFor(modelItem => item.EndDate)</div>
-    };
-
-    <div>
-        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+    <div class="d-flex justify-content-between">
+        <div>
+            <h4>@Html.DisplayFor(modelItem => item.Name)</h4>
+            <div class="date">
+                @if (item.StartDate == item.EndDate)
+                {
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                }
+                else
+                {
+                    <span>@Html.DisplayFor(modelItem => item.StartDate)-@Html.DisplayFor(modelItem => item.EndDate)</span>
+                }
+            </div>
+        </div>
+        <div>
+            <a asp-controller="Cities" asp-action="Create" asp-route-tripId="@item.Id">Add City</a>
+            <br />
+            <span class="small_links"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></span>
+        </div>
     </div>
+
+
+
     <div>
         @Html.DisplayFor(modelItem => item.Notes)
     </div>
-    <div><a asp-controller="Cities" asp-action="Create" asp-route-tripId="@item.Id">Add City</a></div>
-    <div>
+
+    <div class="row cities_container">
         @foreach (var city in item.Cities)
         {
-            <div>
-                <a asp-controller="Cities" asp-action="Details" asp-route-id="@city.Id">@Html.DisplayFor(modelItem => city.Name)</a>
+            <div class="col-md-2 city_card">
+                <a asp-controller="Cities" asp-action="Details" asp-route-id="@city.Id">
+                    <div>
+                        @Html.DisplayFor(modelItem => city.Name)
+                    </div>
+                    <div class="date">
+                        @if (city.StartDate == city.EndDate)
+                        {
+                            @Html.DisplayFor(modelItem => city.StartDate)
+                        }
+                        else
+                        {
+                            <span>@Html.DisplayFor(modelItem => city.StartDate) - @Html.DisplayFor(modelItem => city.EndDate)</span>
+                        }
+                    </div>
+                </a>
             </div>
-            @if (city.StartDate == city.EndDate)
-            {
-                <div>@Html.DisplayFor(modelItem => city.StartDate)</div>
-            }
-            else
-            {
-                <div>@Html.DisplayFor(modelItem => city.StartDate) - @Html.DisplayFor(modelItem => city.EndDate)</div>
-            };
         }
     </div>
+</div>
 }

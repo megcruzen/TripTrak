@@ -1,65 +1,102 @@
-﻿@model TripTrak.Models.Place
+﻿@*@model TripTrak.Models.Place*@
+@model TripTrak.Models.ViewModels.CategorySubcategoryViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
+<script src="/lib/jquery/dist/jquery.js"></script>
+
+@*@{ var subcatId = Model.Place.SubcategoryId; }*@
+@*@{ var subcatName = Model.Subcategory.Name; }*@
+@*@{ var catId = Model.Subcategory.CategoryId;}*@
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        var items = "<option value='0'>Select</option>";
+        $('#Place_SubcategoryId').html(items);
+    });
+</script>*@
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#Category_Id').change(function () {
+                var url = '@Url.Content("~/")' + "Places/GetSubcategory?CategoryId=" + $('#Category_Id').val();
+                var ddlsource = "#Category_Id";
+                $.getJSON(url, { CategoryId: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#Place_SubcategoryId").empty();
+                    $.each(data, function (i, subcategory) {
+                        items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
+                    });
+                    //$('select option[value=${subcatId}]').attr("selected", true);
+                    $('#Place_SubcategoryId').html(items);
+                });
+            });
+        });
+</script>
+
 <h1>Edit Place</h1>
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" asp-route-cityId="@Model.CityId">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Place.Id" />
+            <input type="hidden" asp-for="Place.CityId" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Place.Name" class="control-label"></label> <span class="text-danger">*</span>
+                <input asp-for="Place.Name" class="form-control" />
+                <span asp-validation-for="Place.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
+                <label asp-for="Place.Location" class="control-label"></label>
+                <input asp-for="Place.Location" class="form-control" />
+                <span asp-validation-for="Place.Location" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" type="date" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <label asp-for="Place.StartDate" class="control-label"></label>
+                <input asp-for="Place.StartDate" class="form-control" type="date" />
+                <span asp-validation-for="Place.StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" type="date" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <label asp-for="Place.EndDate" class="control-label"></label>
+                <input asp-for="Place.EndDate" class="form-control" type="date" />
+                <span asp-validation-for="Place.EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PlaceUrl" class="control-label"></label>
-                <input asp-for="PlaceUrl" class="form-control" />
-                <span asp-validation-for="PlaceUrl" class="text-danger"></span>
+                <label asp-for="Place.PlaceUrl" class="control-label"></label>
+                <input asp-for="Place.PlaceUrl" class="form-control" />
+                <span asp-validation-for="Place.PlaceUrl" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Notes" class="control-label"></label>
-                <textarea asp-for="Notes" class="form-control"></textarea>
-                <span asp-validation-for="Notes" class="text-danger"></span>
+                <label asp-for="Place.Notes" class="control-label"></label>
+                <textarea asp-for="Place.Notes" class="form-control"></textarea>
+                <span asp-validation-for="Place.Notes" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Favorite" /> @Html.DisplayNameFor(model => model.Favorite)
+                    <input class="form-check-input" asp-for="Place.Favorite" /> @Html.DisplayNameFor(model => model.Place.Favorite)
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="SubcategoryId" class="control-label"></label>
-                <select asp-for="SubcategoryId" class="form-control" asp-items="ViewBag.SubcategoryId"></select>
-                <span asp-validation-for="SubcategoryId" class="text-danger"></span>
+                <label asp-for="Category.Id" class="control-label"></label> <span class="text-danger">*</span>
+                <select asp-for="Category.Id" class="form-control" asp-items="@Model.CategoryOptions"></select>
+                <span asp-validation-for="Category.Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="Place.SubcategoryId" class="control-label"></label> <span class="text-danger">*</span>
+                <select asp-for="Place.SubcategoryId" class="form-control" asp-items="@Model.SubcategoryOptions"></select>
+                <span asp-validation-for="Place.SubcategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" /> <a asp-controller="Cities" asp-action="Details" asp-route-id="@Model.Place.CityId">Cancel</a>
+            </div>
+            <div>
+                <span class="text-danger">* Required field</span>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

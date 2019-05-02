@@ -9,6 +9,7 @@ namespace TripTrak.Models
     public class Category
     {
         [Key]
+        [Display(Name = "Category")]
         public int Id { get; set; }
 
         [Required]

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TripTrak.Data;
 using TripTrak.Models;
+using TripTrak.Models.ViewModels;
 
 namespace TripTrak.Controllers
 {
@@ -81,7 +82,6 @@ namespace TripTrak.Controllers
 
             // ------- Assign categoryList to ViewBag.ListofCategory -------
             ViewBag.ListofCategory = categoryList;
-            //return View();
 
             return View(place);
         }
@@ -110,7 +110,7 @@ namespace TripTrak.Controllers
             ModelState.Remove("userId");
             var user = await GetCurrentUserAsync();
             place.UserId = user.Id;
-
+            
             if (ModelState.IsValid)
             {
                 _context.Add(place);
@@ -126,27 +126,72 @@ namespace TripTrak.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            var place = await _context.Place.FindAsync(id);
+            var place = await _context.Place
+                .Include(p => p.Subcategory)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (place == null || id == null)
             {
                 return RedirectToAction("PageNotFound", "Home");
             }
-            ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name", place.SubcategoryId);
+
+            /*
+            ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name");
+
+            // Get current category (tied to the current subcategoryId)
+            var currentCat = place.Subcategory.CategoryId;
+            //ViewData["CategoryId"] = place.Subcategory.CategoryId;
+            //ViewBag.SelectedCategory = currentCat;
+
+            // Create list of categories
+            List<Category> categoryList = new List<Category>();
+            //categoryList = (from category in _context.Category
+            //                select category).ToList();
+
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", currentCat);
+
+            // Insert default select item in category list
+            categoryList.Insert(0, new Category { Id = 0, Name = "Select" });
+
+            // Assign categoryList to ViewBag.ListofCategory
+            //ViewBag.ListofCategories = categoryList(currentCat);
+
+            // Get all Subcategories in the selected Category
+            List<Subcategory> subcatList = new List<Subcategory>();
+            subcatList = (from subcategory in _context.Subcategory
+                            select subcategory)
+                            .Where(s => s.CategoryId == currentCat)
+                            .ToList();
+            ViewBag.ListofSubcategories = subcatList;
+
             return View(place);
+            */
+
+            var currentCatId = place.Subcategory.CategoryId;
+            var viewModel = new CategorySubcategoryViewModel()
+            {
+                Place = place,
+                CategoryOptions = new SelectList(_context.Category, "Id", "Name", currentCatId),
+                SubcategoryOptions = new SelectList(_context.Subcategory.Where(s => s.CategoryId == currentCatId), "Id", "Name", place.SubcategoryId)
+            };
+            return View(viewModel);
         }
 
         // POST: Places/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Location,StartDate,EndDate,PlaceUrl,Notes,Favorite,SubcategoryId,CityId,UserId")] Place place)
+        public async Task<IActionResult> Edit(int id, CategorySubcategoryViewModel viewModel)
         {
+            var place = viewModel.Place;
+
             if (id != place.Id)
             {
                 return RedirectToAction("PageNotFound", "Home");
             }
 
-            ModelState.Remove("User");
-            ModelState.Remove("userId");
+            ModelState.Remove("Place.User");
+            ModelState.Remove("Place.UserId");
+            ModelState.Remove("Category.Name");
             var user = await GetCurrentUserAsync();
             place.UserId = user.Id;
 
@@ -170,8 +215,17 @@ namespace TripTrak.Controllers
                 }
                 return RedirectToAction("Details", "Cities", new { id = place.CityId });
             }
-            ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name", place.SubcategoryId);
-            return View(place);
+            
+            var currentCatId = place.Subcategory.CategoryId;
+
+            viewModel = new CategorySubcategoryViewModel()
+            {
+                Place = place,
+                CategoryOptions = new SelectList(_context.Category, "Id", "Name", currentCatId),
+                SubcategoryOptions = new SelectList(_context.Subcategory, "Id", "Name", place.SubcategoryId)
+            };
+
+            return View(viewModel);
         }
 
         // GET: Places/Delete/5

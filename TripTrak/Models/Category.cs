@@ -15,5 +15,7 @@ namespace TripTrak.Models
         public string Name { get; set; }
 
         public string IconUrl { get; set; }
+
+        public List<Subcategory> Subcategories { get; set; }
     }
 }

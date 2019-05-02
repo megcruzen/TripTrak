@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using TripTrak.Models;
 
 namespace TripTrak.Controllers
 {
+    [Authorize]
     public class TripsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,19 +38,14 @@ namespace TripTrak.Controllers
         // GET: Trips/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var trip = await _context.Trip
                 .Include(t => t.User)
                 .Include(t => t.Cities)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (trip == null)
+            if (trip == null || id == null)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
 
             return View(trip);
@@ -60,7 +57,7 @@ namespace TripTrak.Controllers
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
             return View();
         }
@@ -89,15 +86,10 @@ namespace TripTrak.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            if (id == null || user == null)
-            {
-                return NotFound();
-            }
-
             var trip = await _context.Trip.FindAsync(id);
-            if (trip == null)
+            if (trip == null || id == null)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
             
             return View(trip);
@@ -110,7 +102,7 @@ namespace TripTrak.Controllers
         {
             if (id != trip.Id)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
 
             ModelState.Remove("User");
@@ -129,7 +121,7 @@ namespace TripTrak.Controllers
                 {
                     if (!TripExists(trip.Id))
                     {
-                        return NotFound();
+                        return RedirectToAction("PageNotFound", "Home");
                     }
                     else
                     {
@@ -145,17 +137,13 @@ namespace TripTrak.Controllers
         // GET: Trips/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var trip = await _context.Trip
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (trip == null)
+
+            if (trip == null || id == null)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
 
             return View(trip);

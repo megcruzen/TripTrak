@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using TripTrak.Models;
 
 namespace TripTrak.Controllers
 {
+    [Authorize]
     public class PlacesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -56,7 +58,7 @@ namespace TripTrak.Controllers
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
 
             var place = new Place();
@@ -95,15 +97,10 @@ namespace TripTrak.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            if (id == null || user == null)
-            {
-                return NotFound();
-            }
-
             var place = await _context.Place.FindAsync(id);
-            if (place == null)
+            if (place == null || id == null)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
             ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name", place.SubcategoryId);
             return View(place);
@@ -116,7 +113,7 @@ namespace TripTrak.Controllers
         {
             if (id != place.Id)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
 
             ModelState.Remove("User");
@@ -135,7 +132,7 @@ namespace TripTrak.Controllers
                 {
                     if (!PlaceExists(place.Id))
                     {
-                        return NotFound();
+                        return RedirectToAction("PageNotFound", "Home");
                     }
                     else
                     {
@@ -151,17 +148,12 @@ namespace TripTrak.Controllers
         // GET: Places/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var place = await _context.Place
                 .Include(p => p.Subcategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (place == null)
+            if (place == null || id == null)
             {
-                return NotFound();
+                return RedirectToAction("PageNotFound", "Home");
             }
 
             return View(place);
@@ -175,7 +167,7 @@ namespace TripTrak.Controllers
             var place = await _context.Place.FindAsync(id);
             _context.Place.Remove(place);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Cities", new { id = place.CityId });
         }
 
         private bool PlaceExists(int id)

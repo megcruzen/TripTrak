@@ -47,6 +47,12 @@
                     <input class="form-check-input" asp-for="Favorite" /> @Html.DisplayNameFor(model => model.Favorite)
                 </label>
             </div>
+            @*<div class="form-group">
+            <label class="control-label">Category</label>
+            <select class="form-control">
+                <option value="1">Arts/Culture</option>
+            </select>
+        </div>*@
             <div class="form-group">
                 <label asp-for="SubcategoryId" class="control-label"></label>
                 <select asp-for="SubcategoryId" class="form-control" asp-items="ViewBag.SubcategoryId"></select>

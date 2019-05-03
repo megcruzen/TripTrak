@@ -46,6 +46,8 @@ button.btn-primary:not(:disabled):not(.disabled):active {
 .btn-danger { background-color: #db504a; }
 .text-danger { color: #db504a; }
 
+.btn-cancel { background-color: #eeeeee; }
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -121,8 +123,7 @@ button.accept-policy {
 }
 
 .date-sm {
-    font-size: 12px;
-    line-height: 14px;
+    font-size: 13px;
     letter-spacing: -0.5px;
 }
 
@@ -138,7 +139,7 @@ button.accept-policy {
     margin: 0;
 }
 
-.trip_card .notes {
+.trip_card .notes, .place_card .notes {
     font-size: 13px;
     line-height: 16px;
     padding: 15px 0px;
@@ -159,7 +160,7 @@ button.accept-policy {
     text-align: center;
 }
 
-.city_card a {
+.city_card a, .place_card a {
     color: #212529;
     text-decoration: none;
 }
@@ -175,4 +176,21 @@ button.accept-policy {
 .city_card h6 {
     font-weight: normal;
     height: 40px;
+}
+
+.card {
+    border: 0;
+}
+
+.place_card {
+    border: 1px solid #999;
+    border-radius: 10px;
+    /*margin: 10px;*/
+    padding: 10px;
+}
+
+.place_card p {
+    font-size: 13px;
+    line-height: 16px;
+    margin-bottom: 10px;
 }

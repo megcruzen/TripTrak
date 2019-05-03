@@ -9,6 +9,8 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Yes, Delete" class="btn btn-danger" />
+        <a asp-controller="Trips" asp-action="Index" class="btn btn-cancel">Cancel</a>
     </form>
 </div>
-<div><a asp-action="Index">Cancel</a></div>
+
+

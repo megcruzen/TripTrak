@@ -4,11 +4,11 @@
     ViewData["Title"] = "Delete";
 }
 <h1>Delete Trip</h1>
-<div>Are you sure you want to delete your trip "@Html.DisplayFor(model => model.Name)" and all cities and places tied to it?</div>
-<div>
+<div>Are you sure you want to delete your trip <strong>@Html.DisplayFor(model => model.Name)</strong> and all cities and places tied to it?</div>
+<div class="mt-4 mb-1">
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Yes, Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Cancel</a>
+        <input type="submit" value="Yes, Delete" class="btn btn-danger" />
     </form>
 </div>
+<div><a asp-action="Index">Cancel</a></div>

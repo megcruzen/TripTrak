@@ -24,12 +24,12 @@
                 }
                 else
                 {
-                    <span>@Html.DisplayFor(modelItem => item.StartDate)-@Html.DisplayFor(modelItem => item.EndDate)</span>
+                    <span>@Html.DisplayFor(modelItem => item.StartDate) - @Html.DisplayFor(modelItem => item.EndDate)</span>
                 }
             </div>
         </div>
         <div class="text-center my-2 my-sm-0">
-            <asp asp-controller="Cities" asp-action="Create" asp-route-tripId="@item.Id" class="btn btn-secondary btn-sm">Add City</asp>
+            <a asp-controller="Cities" asp-action="Create" asp-route-tripId="@item.Id" class="btn btn-secondary btn-sm">Add City</a>
             <br />
             <span class="small_links"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></span>
         </div>
@@ -44,18 +44,35 @@
         {
             <div class="col-md-2 city_card">
                 <a asp-controller="Cities" asp-action="Details" asp-route-id="@city.Id">
-                    <h6>
-                        @Html.DisplayFor(modelItem => city.Name)
-                    </h6>
-                    <div class="date-sm">
-                        @if (city.StartDate == city.EndDate)
+                    <img src="@city.ImageUrl" />
+                    <div class="content">
+                        <h6>
+                            @Html.DisplayFor(modelItem => city.Name)
+                        </h6>
+
+                        @{string startDate = "";}
+                        @{string endDate = "";}
+
+                        @if (@city.StartDate != null)
                         {
-                            @Html.DisplayFor(modelItem => city.StartDate)
+                            startDate = city.StartDate.Value.ToString("MMM d");
                         }
-                        else
+
+                        @if (@city.EndDate != null)
                         {
-                            <span>@Html.DisplayFor(modelItem => city.StartDate) -<br />@Html.DisplayFor(modelItem => city.EndDate)</span>
+                            endDate = city.EndDate.Value.ToString("MMM d");
                         }
+
+                        <div class="date-sm">
+                            @if (startDate == endDate)
+                            {
+                                <span>@startDate</span>
+                            }
+                            else
+                            {
+                                <span>@startDate - @endDate</span>
+                            }
+                        </div>
                     </div>
                 </a>
             </div>

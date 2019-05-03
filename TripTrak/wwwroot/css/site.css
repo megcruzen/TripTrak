@@ -2,6 +2,9 @@
     font-family: 'Work Sans', Arial, Helvetica, sans-serif;
 }
 
+a { color: #067BC2; }
+a:hover { color: #067BC2; }
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -12,21 +15,15 @@ a.navbar-brand {
     border: 0 none;
 }
 
-.btn-primary, .text-primary {
-    background-color: #00a676
-}
-
-.btn-primary:focus, .btn-primary:active {
+/* PRIMARY */
+.btn-primary { background-color: #00a676; }
+.text-primary { color: #00a676; }
+.btn-primary:focus, .btn-primary:hover, .btn-primary:active, .show > .btn-primary.dropdown-toggle {
+    color: #fff;
     background-color: #005B41 !important;
+    border: 0;
     outline: none !important;
     box-shadow: none !important;
-}
-
-.btn-primary:hover, .btn-primary:active,
-.show > .btn-primary.dropdown-toggle {
-    color: #fff;
-    background-color: #005B41;
-    border: 0;
 }
 
 button.btn-primary:not(:disabled):not(.disabled).active,
@@ -34,9 +31,21 @@ button.btn-primary:not(:disabled):not(.disabled):active {
     background-color: #3a344f;
 }
 
-.btn-secondary, .text-secondary {
-    background-color: #da4167;
+/* SECONDARY */
+.btn-secondary { background-color: #da4167; }
+.text-secondary {  color: #da4167; }
+.btn-secondary:focus, .btn-secondary:hover, .btn-secondary:active, .show > .btn-secondary.dropdown-toggle {
+    color: #fff;
+    background-color: #8b1e3f !important;
+    border: 0;
+    outline: none !important;
+    box-shadow: none !important;
 }
+
+/* DANGER */
+.btn-danger { background-color: #db504a; }
+.text-danger { color: #db504a; }
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -90,7 +99,7 @@ button.accept-policy {
 }
 
 .navbar-nav a.text-light:hover, a.text-light:focus {
-    color: red !important;
+    color: #DD5274 !important;
 }
 
 .navbar-nav .btn {
@@ -99,6 +108,13 @@ button.accept-policy {
 
 /* Layout
 -------------------------------------------------- */
+
+#login {
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    width: 300px;
+}
 
 .date-md {
     font-size: 14px;
@@ -136,14 +152,10 @@ button.accept-policy {
     font-size: 10px;
 }
 
-.small_links a {
-    color: #067BC2;
-}
-
 .city_card {
     border: 1px solid #999;
     margin: 10px;
-    padding: 10px;
+    padding: 0;
     text-align: center;
 }
 
@@ -152,6 +164,15 @@ button.accept-policy {
     text-decoration: none;
 }
 
+.city_card img {
+    width: 100%;
+}
+
+.city_card .content {
+    padding: 10px;
+}
+
 .city_card h6 {
     font-weight: normal;
+    height: 40px;
 }

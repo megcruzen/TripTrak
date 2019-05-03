@@ -1,5 +1,9 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿body {
+    font-family: 'Work Sans', Arial, Helvetica, sans-serif;
+}
+
+a { color: #067BC2; }
+a:hover { color: #067BC2; }
 
 a.navbar-brand {
   white-space: normal;
@@ -7,11 +11,57 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.btn {
+    border: 0 none;
+}
+
+/* PRIMARY */
+.btn-primary { background-color: #00a676; }
+.text-primary { color: #00a676; }
+.btn-primary:focus, .btn-primary:hover, .btn-primary:active, .show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #005B41 !important;
+    border: 0;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+button.btn-primary:not(:disabled):not(.disabled).active,
+button.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #3a344f;
+}
+
+/* SECONDARY */
+.btn-secondary { background-color: #da4167; }
+.text-secondary {  color: #da4167; }
+.btn-secondary:focus, .btn-secondary:hover, .btn-secondary:active, .show > .btn-secondary.dropdown-toggle {
+    color: #fff;
+    background-color: #8b1e3f !important;
+    border: 0;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* DANGER */
+.btn-danger { background-color: #db504a; }
+.text-danger { color: #db504a; }
+
+.btn-cancel { background-color: #eeeeee; }
+
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -34,17 +84,6 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
 .footer {
   position: absolute;
   bottom: 0;
@@ -55,16 +94,59 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+/* Navbar
+-------------------------------------------------- */
+.navbar-expand-sm .navbar-nav .nav-link {
+    font-size: 14px;
+}
+
+.navbar-nav a.text-light:hover, a.text-light:focus {
+    color: #DD5274 !important;
+}
+
+.navbar-nav .btn {
+    border: 0;
+}
 
 /* Layout
 -------------------------------------------------- */
 
-.date {
+#login {
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    width: 300px;
+}
+
+.date-md {
+    font-size: 14px;
+}
+
+.date-sm {
     font-size: 13px;
+    letter-spacing: -0.5px;
 }
 
 .trip_card {
-    background-color: #eeeeee;
+    background-color: #fafafa;
+    border: 1px solid #ebebeb;
+    border-radius: 10px;
+    margin: 10px 0px;
+    padding: 15px;
+}
+
+.trip_card h4 {
+    margin: 0;
+}
+
+.trip_card .notes, .place_card .notes {
+    font-size: 13px;
+    line-height: 16px;
+    padding: 15px 0px;
+}
+
+.trip_card .row {
+    margin: 0px;
 }
 
 .small_links {
@@ -74,9 +156,41 @@ body {
 .city_card {
     border: 1px solid #999;
     margin: 10px;
+    padding: 0;
+    text-align: center;
 }
 
-    .city_card a {
-        color: #212529;
-        text-decoration: none;
-    }
+.city_card a, .place_card a {
+    color: #212529;
+    text-decoration: none;
+}
+
+.city_card img {
+    width: 100%;
+}
+
+.city_card .content {
+    padding: 10px;
+}
+
+.city_card h6 {
+    font-weight: normal;
+    height: 40px;
+}
+
+.card {
+    border: 0;
+}
+
+.place_card {
+    border: 1px solid #999;
+    border-radius: 10px;
+    /*margin: 10px;*/
+    padding: 10px;
+}
+
+.place_card p {
+    font-size: 13px;
+    line-height: 16px;
+    margin-bottom: 10px;
+}

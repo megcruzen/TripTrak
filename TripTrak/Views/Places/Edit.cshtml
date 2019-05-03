@@ -6,18 +6,6 @@
 }
 
 <script src="/lib/jquery/dist/jquery.js"></script>
-
-@*@{ var subcatId = Model.Place.SubcategoryId; }*@
-@*@{ var subcatName = Model.Subcategory.Name; }*@
-@*@{ var catId = Model.Subcategory.CategoryId;}*@
-
-@*<script type="text/javascript">
-    $(document).ready(function () {
-        var items = "<option value='0'>Select</option>";
-        $('#Place_SubcategoryId').html(items);
-    });
-</script>*@
-
 <script type="text/javascript">
         $(document).ready(function () {
             $('#Category_Id').change(function () {
@@ -41,7 +29,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly"></div>
             <input type="hidden" asp-for="Place.Id" />
             <input type="hidden" asp-for="Place.CityId" />
             <div class="form-group">
@@ -71,7 +59,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Place.Notes" class="control-label"></label>
-                <textarea asp-for="Place.Notes" class="form-control"></textarea>
+                <textarea asp-for="Place.Notes" class="form-control" rows="6" cols="50"></textarea>
                 <span asp-validation-for="Place.Notes" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -89,8 +77,13 @@
                 <select asp-for="Place.SubcategoryId" class="form-control" asp-items="@Model.SubcategoryOptions"></select>
                 <span asp-validation-for="Place.SubcategoryId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" /> <a asp-controller="Cities" asp-action="Details" asp-route-id="@Model.Place.CityId">Cancel</a>
+            <div class="d-flex justify-content-between">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+                <div>
+                    <a asp-controller="Cities" asp-action="Details" asp-route-id="@Model.Place.CityId" class="btn btn-cancel">Cancel</a>
+                </div>
             </div>
             <div>
                 <span class="text-danger">* Required field</span>

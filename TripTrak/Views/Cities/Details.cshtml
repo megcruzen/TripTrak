@@ -6,60 +6,138 @@
 
 @*@Html.DisplayFor(model => model.ImageUrl)*@
 
-<h1>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.Trip.Name))</h1>
+@{string startDate = "";}
+@{string endDate = "";}
 
-
-@if (Model.StartDate == Model.EndDate)
+@if (@Model.StartDate != null)
 {
-    <div>@Html.DisplayFor(model => model.StartDate)</div>
+    startDate = Model.StartDate.Value.ToString("MMM d");
 }
-else
+
+@if (@Model.EndDate != null)
 {
-    <div>@Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate)</div>
+    endDate = Model.EndDate.Value.ToString("MMM d");
 }
-<div>
-    @Html.DisplayFor(model => model.Notes)
-</div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-    <a asp-action="Index">Back to Trips</a>
-</div>
-
-<div><a asp-controller="Places" asp-action="Create" asp-route-cityId="@Model.Id">Add Place</a></div>
-
-@foreach (var place in Model.Places)
-{
-    <hr />
-    <h4>@Html.DisplayFor(modelItem => place.Name)</h4>
-
-    @if (place.StartDate == place.EndDate)
-    {
-        <div><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate)</div>
-    }
-    else
-    {
-        <div><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate) - @Html.DisplayFor(modelItem => place.EndDate)</div>
-    };
-
-    <div><strong>Location:</strong> @Html.DisplayFor(modelItem => place.Location)</div>
-
-    @if (place.PlaceUrl != null)
-    {
-        <div><strong>URL:</strong> <a href="@place.PlaceUrl">@Html.DisplayFor(modelItem => place.PlaceUrl)</a></div>
-    }
-
-    <div><strong>Notes:</strong> @Html.DisplayFor(modelItem => place.Notes)</div>
-
-    @if (place.Favorite == true)
-    {
-        <div class="text-warning">Favorite!</div>
-    }
-
-        <div>
-            <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id">Edit</a>
-            <br />
-            <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id">Delete</a>
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+    <div>
+        <h1>@Html.DisplayFor(model => model.Name)</h1>
+        <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
+        <div class="date-md">
+            @if (startDate == endDate)
+            {
+                <span><strong>Visited:</strong> @startDate</span>
+            }
+            else
+            {
+                <span><strong>Visited:</strong> @startDate - @endDate</span>
+            }
         </div>
-}
+        <div>
+            @if (Model.Notes != null)
+            {
+                <strong>Notes:</strong> @Html.DisplayFor(model => model.Notes)
+            }
+        </div>
+    </div>
+    <div class="text-center my-2 my-sm-0">
+        <a asp-controller="Places" asp-action="Create" asp-route-cityId="@Model.Id" class="btn btn-primary">Add Place</a>
+        <br />
+        <span class="small_links"><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a></span>
+    </div>
+</div>
+
+<div class="row places_container mt-4">
+    <div class="card-columns">
+
+        @foreach (var place in Model.Places)
+        {
+
+            <div class="card">
+                <div class="place_card d-flex justify-content-between">
+                    <div class="left">
+                        <h5>@Html.DisplayFor(modelItem => place.Name)</h5>
+
+                        @if (place.StartDate == place.EndDate)
+                        {
+                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate)</p>
+                        }
+                        else
+                        {
+                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate) - @Html.DisplayFor(modelItem => place.EndDate)</p>
+                        }
+
+                        @if (place.Location != null)
+                        {
+                            <p><strong>Location:</strong> @Html.DisplayFor(modelItem => place.Location)</p>
+                        }
+
+                        @if (place.Notes != null)
+                        {
+                            <p><strong>Notes:</strong> @Html.DisplayFor(modelItem => place.Notes)</p>
+                        }
+                    </div>
+
+                    <div class="right">
+                        @if (place.Favorite == true)
+                        {
+                            <div class="text-danger"><i class="fas fa-heart"></i></div>
+                        }
+
+                        @if (place.PlaceUrl != null)
+                        {
+                            <div><a href="@place.PlaceUrl"><i class="fas fa-link"></i></a></div>
+                        }
+
+                        <div>
+                            <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id"><i class="fas fa-edit"></i></a>
+                            <br />
+                            <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id"><i class="far fa-trash-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="col-md-3 mt-3">
+                <div class="place_card d-flex justify-content-between">
+                    <div class="left">
+                        <h5>@Html.DisplayFor(modelItem => place.Name)</h5>
+
+                        @if (place.StartDate == place.EndDate)
+                        {
+                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate)</p>
+                        }
+                        else
+                        {
+                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate) - @Html.DisplayFor(modelItem => place.EndDate)</p>
+                        }
+
+                        <p><strong>Location:</strong> @Html.DisplayFor(modelItem => place.Location)</p>
+
+                        <p><strong>Notes:</strong> @Html.DisplayFor(modelItem => place.Notes)</p>
+                    </div>
+
+                    <div class="right">
+                        @if (place.Favorite == true)
+                        {
+                            <div class="text-danger"><i class="fas fa-heart"></i></div>
+                        }
+
+                        @if (place.PlaceUrl != null)
+                        {
+                            <div><a href="@place.PlaceUrl"><i class="fas fa-link"></i></a></div>
+                        }
+
+                        <div>
+                            <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id"><i class="fas fa-edit"></i></a>
+                            <br />
+                            <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id"><i class="far fa-trash-alt"></i></a>
+                        </div>
+                    </div>
+                </div>*@
+
+            @*</div>*@
+        }
+
+    </div>
+</div>

@@ -182,7 +182,7 @@ namespace TripTrak.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CategorySubcategoryViewModel viewModel)
         {
-            var place = viewModel.Place;
+            Place place = viewModel.Place;
 
             if (id != place.Id)
             {
@@ -234,6 +234,10 @@ namespace TripTrak.Controllers
             var place = await _context.Place
                 .Include(p => p.Subcategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            City city = await _context.City
+                .FirstOrDefaultAsync(m => m.Id == place.CityId);
+
             if (place == null || id == null)
             {
                 return RedirectToAction("PageNotFound", "Home");

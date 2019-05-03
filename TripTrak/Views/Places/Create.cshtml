@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
         $(document).ready(function () {
-            var items = "<option value='0'>Select</option>";
+            var items = "<option value='0'>Choose a category</option>";
             $('#SubcategoryId').html(items);
         });
 </script>
@@ -39,7 +39,7 @@
         <form asp-action="Create" asp-route-cityId="@Model.CityId">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label"></label> <span class="text-danger">*</span>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Notes" class="control-label"></label>
-                <textarea asp-for="Notes" class="form-control"></textarea>
+                <textarea asp-for="Notes" class="form-control" rows="6" cols="50"></textarea>
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -74,23 +74,29 @@
                 </label>
             </div>
             <div class="form-group">
-                <label class="control-label">Category</label>
+                <label class="control-label">Category</label> <span class="text-danger">*</span>
                 <select id="CategoryId" class="form-control" asp-items="@(new SelectList(@ViewBag.ListofCategory,"Id", "Name"))"></select>
+                <span class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SubcategoryId" class="control-label"></label>
+                <label asp-for="SubcategoryId" class="control-label"></label> <span class="text-danger">*</span>
                 <select asp-for="SubcategoryId" class="form-control" id="SubcategoryId" name="SubcategoryId"
                         asp-items="@(new SelectList(string.Empty,"Id", "Name"))"></select>
+                <span asp-validation-for="SubcategoryId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="d-flex justify-content-between">
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+                <div>
+                    <a asp-controller="Cities" asp-action="Details" asp-route-id="@Model.CityId" class="btn btn-cancel">Cancel</a>
+                </div>
+            </div>
+            <div>
+                <span class="text-danger">* Required field</span>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

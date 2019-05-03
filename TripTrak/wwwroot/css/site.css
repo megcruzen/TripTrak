@@ -1,5 +1,6 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿body {
+    font-family: 'Work Sans', Arial, Helvetica, sans-serif;
+}
 
 a.navbar-brand {
   white-space: normal;
@@ -7,11 +8,49 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.btn {
+    border: 0 none;
+}
+
+.btn-primary, .text-primary {
+    background-color: #00a676
+}
+
+.btn-primary:focus, .btn-primary:active {
+    background-color: #005B41 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.btn-primary:hover, .btn-primary:active,
+.show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #005B41;
+    border: 0;
+}
+
+button.btn-primary:not(:disabled):not(.disabled).active,
+button.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #3a344f;
+}
+
+.btn-secondary, .text-secondary {
+    background-color: #da4167;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -34,17 +73,6 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
 .footer {
   position: absolute;
   bottom: 0;
@@ -55,28 +83,75 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+/* Navbar
+-------------------------------------------------- */
+.navbar-expand-sm .navbar-nav .nav-link {
+    font-size: 14px;
+}
+
+.navbar-nav a.text-light:hover, a.text-light:focus {
+    color: red !important;
+}
+
+.navbar-nav .btn {
+    border: 0;
+}
 
 /* Layout
 -------------------------------------------------- */
 
-.date {
-    font-size: 13px;
+.date-md {
+    font-size: 14px;
+}
+
+.date-sm {
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: -0.5px;
 }
 
 .trip_card {
-    background-color: #eeeeee;
+    background-color: #fafafa;
+    border: 1px solid #ebebeb;
+    border-radius: 10px;
+    margin: 10px 0px;
+    padding: 15px;
+}
+
+.trip_card h4 {
+    margin: 0;
+}
+
+.trip_card .notes {
+    font-size: 13px;
+    line-height: 16px;
+    padding: 15px 0px;
+}
+
+.trip_card .row {
+    margin: 0px;
 }
 
 .small_links {
     font-size: 10px;
 }
 
+.small_links a {
+    color: #067BC2;
+}
+
 .city_card {
     border: 1px solid #999;
     margin: 10px;
+    padding: 10px;
+    text-align: center;
 }
 
-    .city_card a {
-        color: #212529;
-        text-decoration: none;
-    }
+.city_card a {
+    color: #212529;
+    text-decoration: none;
+}
+
+.city_card h6 {
+    font-weight: normal;
+}

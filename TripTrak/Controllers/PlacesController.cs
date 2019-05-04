@@ -30,7 +30,9 @@ namespace TripTrak.Controllers
         // GET: Places
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Place.Include(p => p.Subcategory);
+            var applicationDbContext = _context.Place
+                .Include(p => p.Subcategory);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -135,38 +137,6 @@ namespace TripTrak.Controllers
                 return RedirectToAction("PageNotFound", "Home");
             }
 
-            /*
-            ViewData["SubcategoryId"] = new SelectList(_context.Subcategory, "Id", "Name");
-
-            // Get current category (tied to the current subcategoryId)
-            var currentCat = place.Subcategory.CategoryId;
-            //ViewData["CategoryId"] = place.Subcategory.CategoryId;
-            //ViewBag.SelectedCategory = currentCat;
-
-            // Create list of categories
-            List<Category> categoryList = new List<Category>();
-            //categoryList = (from category in _context.Category
-            //                select category).ToList();
-
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", currentCat);
-
-            // Insert default select item in category list
-            categoryList.Insert(0, new Category { Id = 0, Name = "Select" });
-
-            // Assign categoryList to ViewBag.ListofCategory
-            //ViewBag.ListofCategories = categoryList(currentCat);
-
-            // Get all Subcategories in the selected Category
-            List<Subcategory> subcatList = new List<Subcategory>();
-            subcatList = (from subcategory in _context.Subcategory
-                            select subcategory)
-                            .Where(s => s.CategoryId == currentCat)
-                            .ToList();
-            ViewBag.ListofSubcategories = subcatList;
-
-            return View(place);
-            */
-
             var currentCatId = place.Subcategory.CategoryId;
             var viewModel = new CategorySubcategoryViewModel()
             {
@@ -176,6 +146,7 @@ namespace TripTrak.Controllers
             };
             return View(viewModel);
         }
+
 
         // POST: Places/Edit/5
         [HttpPost]

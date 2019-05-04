@@ -17,7 +17,6 @@
                     $.each(data, function (i, subcategory) {
                         items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
                     });
-                    //$('select option[value=${subcatId}]').attr("selected", true);
                     $('#Place_SubcategoryId').html(items);
                 });
             });

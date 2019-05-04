@@ -55,8 +55,16 @@
 
             <div class="card">
                 <div class="place_card d-flex justify-content-between">
-                    <div class="left">
-                        <h5>@Html.DisplayFor(modelItem => place.Name)</h5>
+                    <div class="left pr-2">
+
+                        <div class="d-flex align-items-center mb-3">
+                            @if (place.Subcategory.IconUrl != "")
+                            {
+                            <img src="@place.Subcategory.IconUrl" width="30" class="mr-2" />
+                            }
+                            <h6 class="mb-0">@Html.DisplayFor(modelItem => place.Name)</h6>
+                        </div>
+                        
 
                         @if (place.StartDate == place.EndDate)
                         {
@@ -86,10 +94,10 @@
 
                         @if (place.PlaceUrl != null)
                         {
-                            <div><a href="@place.PlaceUrl"><i class="fas fa-link"></i></a></div>
+                            <div class="icon"><a href="@place.PlaceUrl" target="_blank"><i class="fas fa-link"></i></a></div>
                         }
 
-                        <div>
+                        <div class="icon">
                             <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id"><i class="fas fa-edit"></i></a>
                             <br />
                             <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id"><i class="far fa-trash-alt"></i></a>
@@ -97,46 +105,6 @@
                     </div>
                 </div>
             </div>
-
-            @*<div class="col-md-3 mt-3">
-                <div class="place_card d-flex justify-content-between">
-                    <div class="left">
-                        <h5>@Html.DisplayFor(modelItem => place.Name)</h5>
-
-                        @if (place.StartDate == place.EndDate)
-                        {
-                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate)</p>
-                        }
-                        else
-                        {
-                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate) - @Html.DisplayFor(modelItem => place.EndDate)</p>
-                        }
-
-                        <p><strong>Location:</strong> @Html.DisplayFor(modelItem => place.Location)</p>
-
-                        <p><strong>Notes:</strong> @Html.DisplayFor(modelItem => place.Notes)</p>
-                    </div>
-
-                    <div class="right">
-                        @if (place.Favorite == true)
-                        {
-                            <div class="text-danger"><i class="fas fa-heart"></i></div>
-                        }
-
-                        @if (place.PlaceUrl != null)
-                        {
-                            <div><a href="@place.PlaceUrl"><i class="fas fa-link"></i></a></div>
-                        }
-
-                        <div>
-                            <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id"><i class="fas fa-edit"></i></a>
-                            <br />
-                            <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id"><i class="far fa-trash-alt"></i></a>
-                        </div>
-                    </div>
-                </div>*@
-
-            @*</div>*@
         }
 
     </div>

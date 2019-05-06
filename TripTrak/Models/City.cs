@@ -35,5 +35,6 @@ namespace TripTrak.Models
         public string UserId { get; set; }
 
         public List<Place> Places { get; set; } = new List<Place>();
+        //public List<Subcategory> Subcategories { get; set; } = new List<Subcategory>();
     }
 }

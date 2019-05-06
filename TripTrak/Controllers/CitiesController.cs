@@ -33,12 +33,20 @@ namespace TripTrak.Controllers
         }
 
         // GET: Cities/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? catId)
         {
             var city = await _context.City
                 .Include(c => c.Trip)
                 .Include(c => c.Places)
+                    .ThenInclude(p => p.Subcategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            // TO DO: Convert to .Join
+            
+            if (catId != null)
+            {
+                city.Places = city.Places.Where(p => p.Subcategory.CategoryId == catId).ToList();
+            }
 
             if (city == null || id == null)
             {

@@ -1,4 +1,5 @@
 ﻿body {
+    background-color: #fbfbfb;
     font-family: 'Work Sans', Arial, Helvetica, sans-serif;
 }
 
@@ -128,7 +129,7 @@ button.accept-policy {
 }
 
 .trip_card {
-    background-color: #fafafa;
+    background-color: #fff;
     border: 1px solid #ebebeb;
     border-radius: 10px;
     margin: 10px 0px;
@@ -139,7 +140,7 @@ button.accept-policy {
     margin: 0;
 }
 
-.trip_card .notes, .place_card .notes {
+.notes {
     font-size: 13px;
     line-height: 16px;
     padding: 15px 0px;
@@ -154,7 +155,9 @@ button.accept-policy {
 }
 
 .city_card {
-    border: 1px solid #999;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
     margin: 10px;
     padding: 0;
     text-align: center;
@@ -166,6 +169,7 @@ button.accept-policy {
 }
 
 .city_card img {
+    border-radius: 10px 10px 0px 0px;
     width: 100%;
 }
 
@@ -207,7 +211,6 @@ button.accept-policy {
 #filter_btns .btn_all {
     background-color: #540d6e;
 }
-
 #filter_btns .btn1 { 
     background-color: #da4167; 
 }
@@ -217,14 +220,17 @@ button.accept-policy {
 #filter_btns .btn3 { 
     background-color: #00a676; 
 }
-
 #filter_btns .btn1:hover { 
-    background-color: #8b1e3f; }
+    background-color: #8b1e3f; 
+}
 #filter_btns .btn2:hover {
     background-color: #083d77;
 }
 #filter_btns .btn3:hover  {
     background-color: #005b41;
+}
+#filter_btns .btn_all:hover {
+    background-color: #2F0040;
 }
 
 .places_container {
@@ -232,7 +238,7 @@ button.accept-policy {
 }
 
 .place_card {
-    border: 1px solid #999;
+    border: 1px solid #ddd;
     border-radius: 10px;
     /*margin: 10px;*/
     padding: 10px;

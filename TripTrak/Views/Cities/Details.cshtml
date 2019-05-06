@@ -23,7 +23,7 @@
     <div>
         <h1>@Html.DisplayFor(model => model.Name)</h1>
         <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
-        <div class="date-md">
+        <div>
             @if (startDate == endDate)
             {
                 <span><strong>Visited:</strong> @startDate</span>

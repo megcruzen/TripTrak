@@ -19,7 +19,7 @@
     endDate = Model.EndDate.Value.ToString("MMM d");
 }
 
-<div class="d-flex justify-content-between align-items-center flex-wrap">
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
     <div>
         <h1>@Html.DisplayFor(model => model.Name)</h1>
         <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
@@ -47,6 +47,15 @@
     </div>
 </div>
 
+<hr />
+
+<div id="filter_btns" class="d-flex justify-content-between align-items-center flex-wrap">
+    <a asp-action="Details" asp-route-id="@Model.Id"  class="btn_all"><img src="http://chrisandmeg.net/images/all_places.png" /> ALL</a>
+    <a asp-route-catId="1" class="btn1"><img src="http://chrisandmeg.net/images/eat_white.png" /> EAT</a>
+    <a asp-route-catId="2" class="btn2"><img src="http://chrisandmeg.net/images/stay_white.png" /> STAY</a>
+    <a asp-route-catId="3" class="btn3"><img src="http://chrisandmeg.net/images/do_white.png" /> DO</a>
+</div>
+
 <div class="row places_container mt-4">
     <div class="card-columns">
 
@@ -60,11 +69,11 @@
                         <div class="d-flex align-items-center mb-3">
                             @if (place.Subcategory.IconUrl != "")
                             {
-                            <img src="@place.Subcategory.IconUrl" width="30" class="mr-2" />
+                                <img src="@place.Subcategory.IconUrl" width="30" class="mr-2" />
                             }
                             <h6 class="mb-0">@Html.DisplayFor(modelItem => place.Name)</h6>
                         </div>
-                        
+
 
                         @if (place.StartDate == place.EndDate)
                         {

@@ -32,49 +32,20 @@ namespace TripTrak.Controllers
             return View(await _context.City.ToListAsync());
         }
 
-
-        // GET Subcategory for each place
-        public async Task<IActionResult> GetSubcategory(int placeId)
-        {
-            Place place = new Place();
-            place = await _context.Place
-                .Include(p => p.Subcategory)
-                .FirstOrDefaultAsync(m => m.Id == placeId);
-
-            Subcategory subcat = new Subcategory();
-            subcat = await _context.Subcategory
-                .FirstOrDefaultAsync(m => m.Id == place.SubcategoryId);
-
-            return Ok(subcat);
-
-
-            //List<Subcategory> subcategoryList = new List<Subcategory>();
-
-            // ------- Get Data -------
-            //subcategoryList = (from subcategory in _context.Subcategory
-            //                   where subcategory.CategoryId == CategoryId
-            //                   select subcategory).ToList();
-
-            // ------- Insert Select Item in List -------
-            //subcategoryList.Insert(0, new Subcategory { Id = 0, Name = "Select" });
-
-            //return Json(new SelectList(subcategoryList, "Id", "Name"));
-        }
-
         // GET: Cities/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? catId)
         {
             var city = await _context.City
                 .Include(c => c.Trip)
                 .Include(c => c.Places)
+                    .ThenInclude(p => p.Subcategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            foreach (Place place in city.Places)
+            // TO DO: Convert to .Join
+            
+            if (catId != null)
             {
-                Subcategory subcat = new Subcategory();
-                subcat = await _context.Subcategory
-                .FirstOrDefaultAsync(m => m.Id == place.SubcategoryId);
-                place.Subcategory = subcat;
+                city.Places = city.Places.Where(p => p.Subcategory.CategoryId == catId).ToList();
             }
 
             if (city == null || id == null)

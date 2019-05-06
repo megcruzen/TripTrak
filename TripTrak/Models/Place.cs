@@ -30,6 +30,7 @@ namespace TripTrak.Models
         public bool Favorite { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a category and subcategory.")]
         [Display(Name = "Subcategory")]
         public int SubcategoryId { get; set; }
         public Subcategory Subcategory { get; set; }

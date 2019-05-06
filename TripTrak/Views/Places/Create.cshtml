@@ -76,13 +76,12 @@
             <div class="form-group">
                 <label class="control-label">Category</label> <span class="text-danger">*</span>
                 <select id="CategoryId" class="form-control" asp-items="@(new SelectList(@ViewBag.ListofCategory,"Id", "Name"))"></select>
-                <span class="text-danger"></span>
+                <span asp-validation-for="SubcategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SubcategoryId" class="control-label"></label> <span class="text-danger">*</span>
                 <select asp-for="SubcategoryId" class="form-control" id="SubcategoryId" name="SubcategoryId"
                         asp-items="@(new SelectList(string.Empty,"Id", "Name"))"></select>
-                <span asp-validation-for="SubcategoryId" class="text-danger"></span>
             </div>
             <div class="d-flex justify-content-between">
                 <div class="form-group">

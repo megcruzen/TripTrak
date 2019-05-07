@@ -30,6 +30,10 @@ namespace TripTrak.Models
         [Display(Name = "Username")]
         public string DisplayName { get; set; }
 
+        //public List<Friend> FriendList { get; set; } = new List<Friend>();
+        public List<Trip> TripList { get; set; } = new List<Trip>();
+
+
         // Set up PK -> FK relationships to other objects
         public virtual ICollection<SavedPlace> SavedPlaces { get; set; }
     }

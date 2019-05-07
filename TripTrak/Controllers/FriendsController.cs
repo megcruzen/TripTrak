@@ -31,23 +31,6 @@ namespace TripTrak.Controllers
 
             List<ApplicationUser> friendList = new List<ApplicationUser>();
 
-            /*
-            var friends = await _context.Friend
-                .Include(f => f.FriendA)
-                .Include(f => f.FriendB)
-                .Where(f => f.FriendAId == user.Id || f.FriendBId == user.Id)
-                .ToListAsync();
-                */
-
-            /*
-            var friends = await _context.ApplicationUsers
-                .Include(u => u.FriendList)
-                    //.ThenInclude(fl => fl.FriendA)
-                //.Where(f => f.FriendAId == user.Id || f.FriendBId == user.Id)
-                .ToListAsync();
-                */
-
-
             var friends = await _context.Friend
                 .Include(f => f.FriendA)
                     .ThenInclude(fA => fA.TripList)
@@ -69,54 +52,8 @@ namespace TripTrak.Controllers
                     friendList.Add(friend.FriendA);
                 }
             }
-
-            //var friends2 = await _context.Friend
-            //    .Include(f => f.FriendA)
-            //        .ThenInclude(fA => fA.TripList)
-            //    .Include(f => f.FriendB)
-            //        .ThenInclude(fB => fB.TripList)
-            //    .Where(f => f.FriendBId == user.Id)
-            //    .ToListAsync();
-
-            //foreach (Friend friend in friends2)
-            //{
-            //    var friendA = friend.FriendA;
-            //    friendList.Add(friendA);
-            //}
             
-
-            /*
-            var friends = _context.ApplicationUsers
-                .Join(
-                    _context.Friend.Where(x => x.FriendAId == user.Id),
-                    u => u.Id,
-                    f => f.FriendAId,
-                    (u, f) => u)
-                .Take(int.MaxValue);
-            //.ToList();
-            */
-
-            /*
-            var friends = _context.Friend
-                .Join(
-                    _context.ApplicationUsers.Where(x => x.Id == user.Id),
-                    f => f.FriendBId,
-                    u => u.Id,
-                    (f, u) => f)
-                .Take(int.MaxValue);
-                */
-
-            /*
-            var robotDogs = context.RobotDogs
-            .Join(
-                context.RobotFactories.Where(x => x.Location == "Texas"),
-                d => d.RobotFactoryId,
-                f => f.RobotFactoryId,
-                (d, f) => d)
-            .ToList();
-            */
-
-            //return View(friends);
+           
             return View(friendList);
         }
 

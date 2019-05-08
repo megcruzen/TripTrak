@@ -44,7 +44,32 @@ namespace TripTrak.Controllers
             return View(friends);
         }
 
-        
+        // GET: Friends/FriendSearch
+        public async Task<IActionResult> FriendSearch(string searchString)
+        {
+            if (String.IsNullOrEmpty(searchString))
+            {
+                return View(new List<ApplicationUser>());
+            }
+
+            var users = _context.ApplicationUsers.AsQueryable();
+            users = users.Where(u => u.LastName.Contains(searchString) || u.FirstName.Contains(searchString));
+            return View(await users.AsNoTracking().ToListAsync());
+        }
+
+        // POST: Friends/AddFriend
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddFriend([Bind("Id,FriendA,FriendB,Status")] Friend friend)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(friend);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(friend);
+        }
 
         // GET: Friends/Create
         public IActionResult Create()
@@ -53,8 +78,6 @@ namespace TripTrak.Controllers
         }
 
         // POST: Friends/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FriendA,FriendB,Status")] Friend friend)

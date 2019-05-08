@@ -24,56 +24,27 @@ namespace TripTrak.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
+
         // GET: Friends
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
 
-            List<ApplicationUser> friendList = new List<ApplicationUser>();
-
-            var friends = await _context.Friend
+            var friends = (await _context.Friend
                 .Include(f => f.FriendA)
                     .ThenInclude(fA => fA.TripList)
+                        .ThenInclude(t => t.Cities)
                 .Include(f => f.FriendB)
                     .ThenInclude(fB => fB.TripList)
-                .Where(f => f.FriendAId == user.Id || f.FriendBId == user.Id)
-                .ToListAsync();
+                        .ThenInclude(t => t.Cities)
+                .Where(f => (f.FriendAId == user.Id || f.FriendBId == user.Id) && f.Status == "accepted")
+                .ToListAsync())
+                .Select(f => f.FriendA.Id == user.Id ? f.FriendB : f.FriendA);
 
-            
-            foreach (Friend friend in friends)
-            {
-                if (friend.FriendB.Id != user.Id)
-                {
-                    friendList.Add(friend.FriendB);
-                }
-
-                if (friend.FriendA.Id != user.Id)
-                {
-                    friendList.Add(friend.FriendA);
-                }
-            }
-            
-           
-            return View(friendList);
+            return View(friends);
         }
 
-        // GET: Friends/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var friend = await _context.Friend
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (friend == null)
-            {
-                return NotFound();
-            }
-
-            return View(friend);
-        }
+        
 
         // GET: Friends/Create
         public IActionResult Create()

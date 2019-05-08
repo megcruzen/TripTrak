@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TripTrak.Data;
 using TripTrak.Models;
+using TripTrak.Models.ViewModels;
 
 namespace TripTrak.Controllers
 {
@@ -28,6 +29,7 @@ namespace TripTrak.Controllers
         // GET: Friends
         public async Task<IActionResult> Index()
         {
+            // Get current user
             var user = await GetCurrentUserAsync();
 
             var friends = (await _context.Friend
@@ -60,17 +62,27 @@ namespace TripTrak.Controllers
         // POST: Friends/AddFriend
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddFriend([Bind("Id,FriendA,FriendB,Status")] Friend friend)
+        public async Task<IActionResult> AddFriend(AddFriendViewModel viewModel)
         {
+            // Get current user
+            var user = await GetCurrentUserAsync();
+
+            // Create Friend connection with "pending" status
+            Friend newFriend = new Friend();
+            newFriend.FriendAId = user.Id;
+            newFriend.FriendBId = viewModel.Id;
+            newFriend.Status = "pending";
+            
             if (ModelState.IsValid)
             {
-                _context.Add(friend);
+                _context.Add(newFriend);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(friend);
+            return RedirectToAction(nameof(Index));
         }
 
+        /*
         // GET: Friends/Create
         public IActionResult Create()
         {
@@ -90,56 +102,40 @@ namespace TripTrak.Controllers
             }
             return View(friend);
         }
+        */
 
-        // GET: Friends/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        // GET: Friends/AcceptRequest/5
+        //public async Task<IActionResult> AcceptRequest(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var friend = await _context.Friend.FindAsync(id);
-            if (friend == null)
-            {
-                return NotFound();
-            }
-            return View(friend);
-        }
+        //    var friend = await _context.Friend.FindAsync(id);
+        //    if (friend == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(friend);
+        //}
 
-        // POST: Friends/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Friends/AcceptRequest/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FriendA,FriendB,Status")] Friend friend)
+        public async Task<IActionResult> AcceptRequest(int id)
         {
-            if (id != friend.Id)
-            {
-                return NotFound();
-            }
+            // Get current friendship
+            var friendship = await _context.Friend.FindAsync(id);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(friend);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FriendExists(friend.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(friend);
+            // Update status in friendship
+            friendship.Status = "accepted";
+
+            _context.Update(friendship);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Friends/Delete/5

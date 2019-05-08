@@ -11,6 +11,10 @@
     </div>
 </div>
 
+<div>
+    @await Component.InvokeAsync("FriendRequests")
+</div>
+
 <div class="row friends_container">
     @foreach (var item in Model)
     {

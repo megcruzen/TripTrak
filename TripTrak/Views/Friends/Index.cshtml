@@ -25,7 +25,7 @@
                         @Html.DisplayFor(modelItem => item.FirstName)
                     </h4>
                     <div>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger"><i class="fas fa-times-circle"></i></a>
+                        <a asp-action="Delete" asp-route-friendId="@item.Id" class="text-danger"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 @foreach (Trip trip in item.TripList)

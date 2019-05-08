@@ -139,21 +139,19 @@ namespace TripTrak.Controllers
         }
 
         // GET: Friends/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string friendId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            // Get current user
+            var user = await GetCurrentUserAsync();
 
-            var friend = await _context.Friend
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (friend == null)
-            {
-                return NotFound();
-            }
+            // Find friendship
+            var friendship = await _context.Friend
+                .Include(f => f.FriendA)
+                .Include(f => f.FriendB)
+                .Where(f => (f.FriendAId == friendId && f.FriendBId == user.Id) || (f.FriendBId == friendId && f.FriendAId == user.Id))
+                .FirstOrDefaultAsync();
 
-            return View(friend);
+            return View(friendship);
         }
 
         // POST: Friends/Delete/5

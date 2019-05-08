@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TripTrak.Models;
+using TripTrak.Models.ViewModels;
 
 namespace TripTrak.Data
 {
@@ -18,6 +19,7 @@ namespace TripTrak.Data
         public DbSet<Place> Place { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Subcategory> Subcategory { get; set; }
+        public DbSet<Friend> Friend { get; set; }
         public DbSet<SavedPlace> SavedPlace { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -296,5 +298,6 @@ namespace TripTrak.Data
                 }
             );
         }
+
     }
 }

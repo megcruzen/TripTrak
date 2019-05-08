@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<TripTrak.Models.Friend>
 
-<h3>Friend Requests</h3>
+@*<h3>Friend Requests</h3>
 <table class="table">
-    <tbody>
+    <tbody>*@
+
         @foreach (var friendship in Model)
     {
         <tr>
             <td>
-                @friendship.FriendA.FirstName
+                @friendship.FriendA.FullName
             </td>
             <td>
                 <form asp-controller="Friends" asp-action="AcceptRequest">
@@ -16,12 +17,13 @@
                 </form>
             </td>
             <td>
-                <form asp-controller="Friends" asp-action="DenyRequest">
+                <form asp-controller="Friends" asp-action="DeleteRequest">
                     <input type="hidden" name="id" asp-for="@friendship.Id" />
-                    <input type="submit" value="Ignore" class="btn btn-primary" />
+                    <input type="submit" value="Ignore" class="btn btn-cancel" />
                 </form>
             </td>
         </tr>
     }
-    </tbody>
-</table>
+
+    @*</tbody>
+</table>*@

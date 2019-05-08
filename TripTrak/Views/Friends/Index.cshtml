@@ -11,9 +11,13 @@
     </div>
 </div>
 
-<div>
-    @await Component.InvokeAsync("FriendRequests")
-</div>
+<h5>Friend Requests</h5>
+<table class="table">
+    <tbody>
+        @await Component.InvokeAsync("FriendRequests")
+        @await Component.InvokeAsync("PendingRequests")
+    </tbody>
+</table>
 
 <div class="row friends_container">
     @foreach (var item in Model)
@@ -36,13 +40,13 @@
                     <div class="friends_cities d-flex align-items-center flex-wrap mb-3">
                         @foreach (City city in trip.Cities)
                         {
-                        <a asp-controller="Cities" asp-action="Details" asp-route-id="@city.Id"><div>@city.Name</div></a>
+                            <a asp-controller="Cities" asp-action="Details" asp-route-id="@city.Id"><div>@city.Name</div></a>
                         }
                     </div>
                 }
             </div>
         </div>
 
-     }
- </div>
+    }
+</div>
 

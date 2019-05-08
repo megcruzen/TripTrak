@@ -82,44 +82,6 @@ namespace TripTrak.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        /*
-        // GET: Friends/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Friends/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FriendA,FriendB,Status")] Friend friend)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(friend);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(friend);
-        }
-        */
-
-        // GET: Friends/AcceptRequest/5
-        //public async Task<IActionResult> AcceptRequest(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var friend = await _context.Friend.FindAsync(id);
-        //    if (friend == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(friend);
-        //}
-
         // POST: Friends/AcceptRequest/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -136,6 +98,17 @@ namespace TripTrak.Controllers
 
             return RedirectToAction(nameof(Index));
 
+        }
+
+        // POST: Friends/DeleteRequest/5
+        [HttpPost, ActionName("DeleteRequest")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteRequest(int id)
+        {
+            var friend = await _context.Friend.FindAsync(id);
+            _context.Friend.Remove(friend);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Friends/Delete/5
@@ -165,9 +138,5 @@ namespace TripTrak.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FriendExists(int id)
-        {
-            return _context.Friend.Any(e => e.Id == id);
-        }
     }
 }

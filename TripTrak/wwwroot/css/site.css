@@ -256,6 +256,11 @@ button.accept-policy {
     margin-bottom: 10px;
 }
 
+.right {
+    width: 20px;
+    text-align: center;
+}
+
 .icon a {
     color: #a1a1a1;
 }

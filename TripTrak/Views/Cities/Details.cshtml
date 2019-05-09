@@ -103,6 +103,12 @@
                     </div>
 
                     <div class="right">
+                        @if (@UserManager.GetUserId(User) != Model.UserId)
+                        {
+                            <div class="icon">
+                                <a asp-controller="Places" asp-action="SavePlace"><i class="fas fa-bookmark"></i></a>
+                            </div>
+                        }
                         @if (place.Favorite == true)
                         {
                             <div class="text-danger"><i class="fas fa-heart"></i></div>

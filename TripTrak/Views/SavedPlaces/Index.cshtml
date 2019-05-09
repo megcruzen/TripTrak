@@ -1,0 +1,68 @@
+﻿@model IEnumerable<TripTrak.Models.SavedPlace>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Saved Places</h1>
+
+<div class="row places_container mt-4">
+    <div class="card-columns">
+
+        @foreach (var item in Model)
+        {
+
+            <div class="card">
+                <div class="place_card d-flex justify-content-between">
+                    <div class="left pr-2">
+
+                        <div class="d-flex align-items-center mb-3">
+                            @if (item.Place.Subcategory.IconUrl != "")
+                            {
+                                <img src="@item.Place.Subcategory.IconUrl" width="30" class="mr-2" />
+                            }
+                            <h6 class="mb-0">@Html.DisplayFor(modelItem => item.Place.Name)</h6>
+                        </div>
+
+                        <p><strong>User:</strong> @item.Place.User.FullName</p>
+
+                        @if (item.Place.StartDate == item.Place.EndDate)
+                        {
+                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => item.Place.StartDate)</p>
+                        }
+                        else
+                        {
+                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => item.Place.StartDate) - @Html.DisplayFor(modelItem => item.Place.EndDate)</p>
+                        }
+
+                        @if (item.Place.Location != null)
+                        {
+                            <p><strong>Location:</strong> @Html.DisplayFor(modelItem => item.Place.Location)</p>
+                        }
+
+                        @if (item.Place.Notes != null)
+                        {
+                            <p><strong>Notes:</strong> @Html.DisplayFor(modelItem => item.Place.Notes)</p>
+                        }
+                    </div>
+
+                    <div class="right">
+                        <div class="bookmark">
+                            <a asp-controller="SavedPlaces" asp-action="RemovePlace"><i class="fas fa-bookmark"></i></a>
+                        </div>
+                        @if (item.Place.Favorite == true)
+                        {
+                            <div class="text-danger"><i class="fas fa-heart"></i></div>
+                        }
+
+                        @if (item.Place.PlaceUrl != null)
+                        {
+                            <div class="icon"><a href="@item.Place.PlaceUrl" target="_blank"><i class="fas fa-link"></i></a></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

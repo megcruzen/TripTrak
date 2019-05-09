@@ -186,6 +186,12 @@ button.accept-policy {
     border: 0;
 }
 
+@media (min-width: 768px) {
+    .deets {
+        width: 80%;
+    }
+}
+
 #filter_btns a {
     color: #fff;
     font-size: 24px;
@@ -248,6 +254,11 @@ button.accept-policy {
     font-size: 13px;
     line-height: 16px;
     margin-bottom: 10px;
+}
+
+.right {
+    width: 20px;
+    text-align: center;
 }
 
 .icon a {

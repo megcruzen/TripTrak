@@ -29,16 +29,19 @@ namespace TripTrak.Controllers
         // GET: Trips
         public async Task<IActionResult> Index()
         {
+            var user = await GetCurrentUserAsync();
+
             var applicationDbContext = _context.Trip
                 .Include(t => t.User)
-                .Include(t => t.Cities);
+                .Include(t => t.Cities)
+                .Where(t => t.UserId == user.Id);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Trips/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            var trip = await _context.Trip
+           var trip = await _context.Trip
                 .Include(t => t.User)
                 .Include(t => t.Cities)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -55,6 +58,7 @@ namespace TripTrak.Controllers
         public async Task<IActionResult> Create()
         {
             var user = await GetCurrentUserAsync();
+
             if (user == null)
             {
                 return RedirectToAction("PageNotFound", "Home");
@@ -85,9 +89,9 @@ namespace TripTrak.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             var user = await GetCurrentUserAsync();
-
             var trip = await _context.Trip.FindAsync(id);
-            if (trip == null || id == null)
+
+            if (trip == null || id == null || trip.UserId != user.Id)
             {
                 return RedirectToAction("PageNotFound", "Home");
             }
@@ -137,11 +141,12 @@ namespace TripTrak.Controllers
         // GET: Trips/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var user = await GetCurrentUserAsync();
             var trip = await _context.Trip
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (trip == null || id == null)
+            if (trip == null || id == null || trip.UserId != user.Id)
             {
                 return RedirectToAction("PageNotFound", "Home");
             }

@@ -5,5 +5,13 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome, @User.Identity.Name!</h1>
+    <h1>Welcome, @User.Identity.Name!</h1>
 </div>
+
+<h5>Friend Requests</h5>
+<table class="table">
+    <tbody>
+        @await Component.InvokeAsync("FriendRequests")
+        @await Component.InvokeAsync("PendingRequests")
+    </tbody>
+</table>

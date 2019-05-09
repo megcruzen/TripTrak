@@ -1,0 +1,25 @@
+﻿@model IEnumerable<TripTrak.Models.Friend>
+@*<h3>Pending Requests</h3>
+    <table class="table">
+        <tbody>*@
+
+@foreach (var friendship in Model)
+{
+    <tr>
+        <td>
+            @friendship.FriendB.FullName
+        </td>
+        <td>
+            Pending
+        </td>
+        <td>
+            <form asp-controller="Friends" asp-action="DeleteRequest">
+                <input type="hidden" name="id" asp-for="@friendship.Id" />
+                <input type="submit" value="Cancel" class="btn btn-cancel" />
+            </form>
+        </td>
+    </tr>
+}
+
+@*</tbody>
+    </table>*@

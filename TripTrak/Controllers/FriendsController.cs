@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TripTrak.Data;
 using TripTrak.Models;
+using TripTrak.Models.ViewModels;
 
 namespace TripTrak.Controllers
 {
@@ -28,6 +29,7 @@ namespace TripTrak.Controllers
         // GET: Friends
         public async Task<IActionResult> Index()
         {
+            // Get current user
             var user = await GetCurrentUserAsync();
 
             var friends = (await _context.Friend
@@ -44,97 +46,111 @@ namespace TripTrak.Controllers
             return View(friends);
         }
 
-        
-
-        // GET: Friends/Create
-        public IActionResult Create()
+        // GET: Friends/FriendSearch
+        public async Task<IActionResult> FriendSearch(string searchString)
         {
-            return View();
+            if (String.IsNullOrEmpty(searchString))
+            {
+                return View(new List<ApplicationUser>());
+            }
+
+            var user = await GetCurrentUserAsync();
+
+            // Get a list of current friends
+            var friends = (await _context.Friend
+                .Include(f => f.FriendA)
+                .Include(f => f.FriendB)
+                .Where(f => (f.FriendAId == user.Id || f.FriendBId == user.Id) && f.Status == "accepted")
+                .ToListAsync())
+                .Select(f => f.FriendA.Id == user.Id ? f.FriendB : f.FriendA);
+
+            // Get a list of all users
+            var users = _context.ApplicationUsers.AsQueryable();
+            
+            // Create new list to hold filtered users
+            //IEnumerable<ApplicationUser> filteredUsers = users.Except(friends);
+            var filteredUsers = users.Except(friends);
+
+            filteredUsers = filteredUsers.Where(u => u.LastName.Contains(searchString) || u.FirstName.Contains(searchString));
+
+            if(filteredUsers.Count() < 1)
+            {
+                return View(new List<ApplicationUser>());
+            }
+            return View(filteredUsers);
+
+
+            // Search query
+            //users = users.Where(u => u.LastName.Contains(searchString) || u.FirstName.Contains(searchString));
+            //return View(await users.AsNoTracking().ToListAsync());
         }
 
-        // POST: Friends/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Friends/AddFriend
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FriendA,FriendB,Status")] Friend friend)
+        public async Task<IActionResult> AddFriend(AddFriendViewModel viewModel)
         {
+            // Get current user
+            var user = await GetCurrentUserAsync();
+
+            // Create Friend connection with "pending" status
+            Friend newFriend = new Friend();
+            newFriend.FriendAId = user.Id;
+            newFriend.FriendBId = viewModel.Id;
+            newFriend.Status = "pending";
+            
             if (ModelState.IsValid)
             {
-                _context.Add(friend);
+                _context.Add(newFriend);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(friend);
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Friends/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var friend = await _context.Friend.FindAsync(id);
-            if (friend == null)
-            {
-                return NotFound();
-            }
-            return View(friend);
-        }
-
-        // POST: Friends/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Friends/AcceptRequest/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FriendA,FriendB,Status")] Friend friend)
+        public async Task<IActionResult> AcceptRequest(int id)
         {
-            if (id != friend.Id)
-            {
-                return NotFound();
-            }
+            // Get current friendship
+            var friendship = await _context.Friend.FindAsync(id);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(friend);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FriendExists(friend.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(friend);
+            // Update status in friendship
+            friendship.Status = "accepted";
+
+            _context.Update(friendship);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        // POST: Friends/DeleteRequest/5
+        [HttpPost, ActionName("DeleteRequest")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteRequest(int id)
+        {
+            var friend = await _context.Friend.FindAsync(id);
+            _context.Friend.Remove(friend);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Friends/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string friendId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            // Get current user
+            var user = await GetCurrentUserAsync();
 
-            var friend = await _context.Friend
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (friend == null)
-            {
-                return NotFound();
-            }
+            // Find friendship
+            var friendship = await _context.Friend
+                .Include(f => f.FriendA)
+                .Include(f => f.FriendB)
+                .Where(f => (f.FriendAId == friendId && f.FriendBId == user.Id) || (f.FriendBId == friendId && f.FriendAId == user.Id))
+                .FirstOrDefaultAsync();
 
-            return View(friend);
+            return View(friendship);
         }
 
         // POST: Friends/Delete/5
@@ -148,9 +164,5 @@ namespace TripTrak.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FriendExists(int id)
-        {
-            return _context.Friend.Any(e => e.Id == id);
-        }
     }
 }

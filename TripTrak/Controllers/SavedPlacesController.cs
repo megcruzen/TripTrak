@@ -57,27 +57,50 @@ namespace TripTrak.Controllers
             return View(savedPlace);
         }
 
-        // GET: SavedPlaces/Create
-        public IActionResult Create()
-        {
-            ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Name");
-            return View();
-        }
-
-        // POST: SavedPlaces/Create
+        // POST: SavedPlaces/SavePlace
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PlaceId,UserId")] SavedPlace savedPlace)
+        public async Task<IActionResult> SavePlace(int id, int cityId)
         {
+            // Get current user
+            var user = await GetCurrentUserAsync();
+
+            // Create new saved place
+            SavedPlace savedPlace = new SavedPlace();
+            savedPlace.UserId = user.Id;
+            savedPlace.PlaceId = id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(savedPlace);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Cities", new { id = cityId });
             }
-            ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Name", savedPlace.PlaceId);
-            return View(savedPlace);
+            return RedirectToAction(nameof(Index));
         }
+
+        //// GET: SavedPlaces/Create
+        //public IActionResult Create()
+        //{
+        //    ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Name");
+        //    return View();
+        //}
+
+        //// POST: SavedPlaces/Create
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,PlaceId,UserId")] SavedPlace savedPlace)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(savedPlace);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Name", savedPlace.PlaceId);
+        //    return View(savedPlace);
+        //}
 
         // POST: SavedPlaces/RemovePlace/5
         [HttpPost, ActionName("RemovePlace")]

@@ -105,9 +105,11 @@
                     <div class="right">
                         @if (@UserManager.GetUserId(User) != Model.UserId)
                         {
-                            <div class="icon">
-                                <a asp-controller="Places" asp-action="SavePlace"><i class="fas fa-bookmark"></i></a>
-                            </div>
+                        <form asp-controller="SavedPlaces" asp-action="SavePlace">
+                            <input type="hidden" name="id" asp-for="@place.Id" />
+                            <input type="hidden" name="cityId" asp-for="@place.CityId" />
+                            <button type="submit" class="btn btn-link bookmark_unsaved" title="Save"><i class="fas fa-bookmark"></i></button>
+                        </form>
                         }
                         @if (place.Favorite == true)
                         {

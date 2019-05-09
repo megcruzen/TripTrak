@@ -273,17 +273,25 @@ button.accept-policy {
     color: #db504a;
 }
 
+.bookmark_unsaved {
+    color: #a1a1a1;
+    padding: 0;
+}
+
+.bookmark_unsaved:hover {
+    color: #f4d35e;
+}
+
 /* Friends
 -------------------------------------------------- */
-
-.friends_cities a {
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    font-size: 12px;
-    margin: 3px 3px 3px 0px;
-    padding: 5px 10px;
-    text-align: center;
-}
+    .friends_cities a {
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: 12px;
+        margin: 3px 3px 3px 0px;
+        padding: 5px 10px;
+        text-align: center;
+    }
 
 .friends_cities a:hover {
     background-color: #067bc2;

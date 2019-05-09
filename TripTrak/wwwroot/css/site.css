@@ -246,7 +246,6 @@ button.accept-policy {
 .place_card {
     border: 1px solid #ddd;
     border-radius: 10px;
-    /*margin: 10px;*/
     padding: 10px;
 }
 
@@ -265,8 +264,13 @@ button.accept-policy {
     color: #a1a1a1;
 }
 
-.bookmark a {
+.bookmark {
     color: #f4d35e;
+    padding: 0;
+}
+
+.bookmark:hover {
+    color: #db504a;
 }
 
 /* Friends

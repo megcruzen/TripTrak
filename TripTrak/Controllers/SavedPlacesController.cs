@@ -65,8 +65,6 @@ namespace TripTrak.Controllers
         }
 
         // POST: SavedPlaces/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,PlaceId,UserId")] SavedPlace savedPlace)
@@ -81,92 +79,15 @@ namespace TripTrak.Controllers
             return View(savedPlace);
         }
 
-        // GET: SavedPlaces/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var savedPlace = await _context.SavedPlace.FindAsync(id);
-            if (savedPlace == null)
-            {
-                return NotFound();
-            }
-            ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Name", savedPlace.PlaceId);
-            return View(savedPlace);
-        }
-
-        // POST: SavedPlaces/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        // POST: SavedPlaces/RemovePlace/5
+        [HttpPost, ActionName("RemovePlace")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PlaceId,UserId")] SavedPlace savedPlace)
-        {
-            if (id != savedPlace.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(savedPlace);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SavedPlaceExists(savedPlace.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Name", savedPlace.PlaceId);
-            return View(savedPlace);
-        }
-
-        // GET: SavedPlaces/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var savedPlace = await _context.SavedPlace
-                .Include(s => s.Place)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (savedPlace == null)
-            {
-                return NotFound();
-            }
-
-            return View(savedPlace);
-        }
-
-        // POST: SavedPlaces/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> RemovePlace(int id)
         {
             var savedPlace = await _context.SavedPlace.FindAsync(id);
             _context.SavedPlace.Remove(savedPlace);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SavedPlaceExists(int id)
-        {
-            return _context.SavedPlace.Any(e => e.Id == id);
         }
     }
 }

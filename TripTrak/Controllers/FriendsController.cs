@@ -60,29 +60,21 @@ namespace TripTrak.Controllers
             var friends = (await _context.Friend
                 .Include(f => f.FriendA)
                 .Include(f => f.FriendB)
-                .Where(f => (f.FriendAId == user.Id || f.FriendBId == user.Id) && f.Status == "accepted")
+                .Where(f => (f.FriendAId == user.Id || f.FriendBId == user.Id) && (f.Status == "accepted" || f.Status == "pending"))
                 .ToListAsync())
                 .Select(f => f.FriendA.Id == user.Id ? f.FriendB : f.FriendA);
 
-            // Get a list of all users
-            var users = _context.ApplicationUsers.AsQueryable();
+            // Get a list of all users, minus current user
+            var users = _context.ApplicationUsers
+                .Where(u => u.Id != user.Id)
+                .AsQueryable();
             
             // Create new list to hold filtered users
-            //IEnumerable<ApplicationUser> filteredUsers = users.Except(friends);
             var filteredUsers = users.Except(friends);
 
-            filteredUsers = filteredUsers.Where(u => u.LastName.Contains(searchString) || u.FirstName.Contains(searchString));
-
-            if(filteredUsers.Count() < 1)
-            {
-                return View(new List<ApplicationUser>());
-            }
-            return View(filteredUsers);
-
-
             // Search query
-            //users = users.Where(u => u.LastName.Contains(searchString) || u.FirstName.Contains(searchString));
-            //return View(await users.AsNoTracking().ToListAsync());
+            filteredUsers = filteredUsers.Where(u => u.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+            return View(filteredUsers);
         }
 
         // POST: Friends/AddFriend

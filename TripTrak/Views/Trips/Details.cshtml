@@ -1,10 +1,12 @@
 ﻿@model TripTrak.Models.Trip
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Details";
 }
-
-
 
 <div class="d-flex justify-content-between flex-wrap">
     <div>
@@ -20,11 +22,14 @@
             }
         </div>
     </div>
-    <div class="text-center my-2 my-sm-0">
-        <a asp-controller="Cities" asp-action="Create" asp-route-tripId="@Model.Id" class="btn btn-secondary btn-sm">Add City</a>
-        <br />
-        <span class="small_links"><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a></span>
-    </div>
+    @if (@UserManager.GetUserId(User) == Model.UserId)
+    { 
+        <div class="text-center my-2 my-sm-0">
+            <a asp-controller="Cities" asp-action="Create" asp-route-tripId="@Model.Id" class="btn btn-secondary btn-sm">Add City</a>
+            <br />
+            <span class="small_links"><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a></span>
+        </div>
+    }
 </div>
 
 <div class="notes col-12 col-sm-10 px-0">

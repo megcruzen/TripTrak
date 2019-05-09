@@ -186,6 +186,12 @@ button.accept-policy {
     border: 0;
 }
 
+@media (min-width: 768px) {
+    .deets {
+        width: 80%;
+    }
+}
+
 #filter_btns a {
     color: #fff;
     font-size: 24px;

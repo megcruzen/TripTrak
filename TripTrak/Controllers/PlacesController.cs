@@ -28,13 +28,13 @@ namespace TripTrak.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Places
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Place
-                .Include(p => p.Subcategory);
+        //public async Task<IActionResult> Index()
+        //{
+        //    var applicationDbContext = _context.Place
+        //        .Include(p => p.Subcategory);
 
-            return View(await applicationDbContext.ToListAsync());
-        }
+        //    return View(await applicationDbContext.ToListAsync());
+        //}
 
         // GET: Places/Details/5
         //public async Task<IActionResult> Details(int? id)
@@ -132,7 +132,7 @@ namespace TripTrak.Controllers
                 .Include(p => p.Subcategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (place == null || id == null)
+            if (place == null || id == null || place.UserId != user.Id)
             {
                 return RedirectToAction("PageNotFound", "Home");
             }
@@ -202,6 +202,8 @@ namespace TripTrak.Controllers
         // GET: Places/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var user = await GetCurrentUserAsync();
+
             var place = await _context.Place
                 .Include(p => p.Subcategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -209,7 +211,7 @@ namespace TripTrak.Controllers
             City city = await _context.City
                 .FirstOrDefaultAsync(m => m.Id == place.CityId);
 
-            if (place == null || id == null)
+            if (place == null || id == null || place.UserId != user.Id)
             {
                 return RedirectToAction("PageNotFound", "Home");
             }

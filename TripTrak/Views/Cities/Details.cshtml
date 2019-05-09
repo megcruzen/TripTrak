@@ -1,4 +1,8 @@
 ﻿@model TripTrak.Models.City
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Details";
@@ -19,8 +23,8 @@
     endDate = Model.EndDate.Value.ToString("MMM d");
 }
 
-<div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
-    <div>
+<div class="d-flex justify-content-between flex-wrap mb-2">
+    <div class="deets">
         <h1>@Html.DisplayFor(model => model.Name)</h1>
         <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
         <div>
@@ -40,17 +44,20 @@
             }
         </div>
     </div>
-    <div class="text-center my-2 my-sm-0">
-        <a asp-controller="Places" asp-action="Create" asp-route-cityId="@Model.Id" class="btn btn-primary">Add Place</a>
-        <br />
-        <span class="small_links"><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a></span>
-    </div>
+    @if (@UserManager.GetUserId(User) == Model.UserId)
+    {
+        <div class="text-center my-2 my-sm-0">
+            <a asp-controller="Places" asp-action="Create" asp-route-cityId="@Model.Id" class="btn btn-primary">Add Place</a>
+            <br />
+            <span class="small_links"><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a></span>
+        </div>
+    }
 </div>
 
 <hr />
 
 <div id="filter_btns" class="d-flex justify-content-between align-items-center flex-wrap">
-    <a asp-action="Details" asp-route-id="@Model.Id"  class="btn_all"><img src="http://chrisandmeg.net/images/all_places.png" /> ALL</a>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn_all"><img src="http://chrisandmeg.net/images/all_places.png" /> ALL</a>
     <a asp-route-catId="1" class="btn1"><img src="http://chrisandmeg.net/images/eat_white.png" /> EAT</a>
     <a asp-route-catId="2" class="btn2"><img src="http://chrisandmeg.net/images/stay_white.png" /> STAY</a>
     <a asp-route-catId="3" class="btn3"><img src="http://chrisandmeg.net/images/do_white.png" /> DO</a>
@@ -106,11 +113,14 @@
                             <div class="icon"><a href="@place.PlaceUrl" target="_blank"><i class="fas fa-link"></i></a></div>
                         }
 
-                        <div class="icon">
-                            <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id"><i class="fas fa-edit"></i></a>
-                            <br />
-                            <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id"><i class="far fa-trash-alt"></i></a>
-                        </div>
+                        @if (@UserManager.GetUserId(User) == Model.UserId)
+                        {
+                            <div class="icon">
+                                <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id"><i class="fas fa-edit"></i></a>
+                                <br />
+                                <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id"><i class="far fa-trash-alt"></i></a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

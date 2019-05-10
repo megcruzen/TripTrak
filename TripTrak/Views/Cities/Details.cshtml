@@ -15,7 +15,7 @@
 
         function getStatus() {
 
-            var targetDivs = document.querySelectorAll(".bookmark");
+            var targetDivs = document.querySelectorAll(".bookmark_icon");
 
             targetDivs.forEach(targetDiv => {
                 var placeId = targetDiv.id;
@@ -25,15 +25,27 @@
                     .then(response => response.json())
                     .then(placeInfo => {
                         if (placeInfo.length > 0) {
-                            // add class="bookmark_saved"
+                            targetDiv.classList.remove("bookmark_icon");
                             targetDiv.classList.add("bookmark_saved");
+                            targetDiv.setAttribute("title", "Remove");
                         }
                         else {
-                            // add class="bookmark_saved"
+                            targetDiv.classList.remove("bookmark_icon");
                             targetDiv.classList.add("bookmark_unsaved");
+                            targetDiv.setAttribute("title", "Save");
                         }
                     });
             });
+        };
+
+        function toggleSaved(placeId) {
+
+            var targetDiv = document.getElementById(placeId);
+            alert(targetDiv.className);
+
+            //if (targetDiv.className.includes("bookmark_unsaved")) {
+            //    alert("Unsaved!")
+            //}
         };
         
         //var className = "";
@@ -99,8 +111,8 @@
 
     <div class="d-flex justify-content-between flex-wrap mb-2">
         <div class="deets">
-            @*<h1>@Html.DisplayFor(model => model.Name)</h1>*@
-            <div><strong>User:</strong> @Html.DisplayFor(model => model.User.FirstName)</div>
+            <h1>@Html.DisplayFor(model => model.Name)</h1>
+            <div><strong>User:</strong> @Html.DisplayFor(model => model.User.FullName)</div>
             <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
             <div>
                 @if (startDate == endDate)
@@ -179,7 +191,7 @@
 
                         <div class="right">
 
-                            <div class="bookmark icon" id="@place.Id"><i class="fas fa-bookmark"></i></div>
+                            <div class="bookmark_icon" id="@place.Id" onclick="toggleSaved(@place.Id)"><i class="fas fa-bookmark"></i></div>
 
                             @if (place.Favorite == true)
                             {

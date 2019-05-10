@@ -41,7 +41,24 @@
         function toggleSaved(placeId) {
 
             var targetDiv = document.getElementById(placeId);
-            alert(targetDiv.className);
+            //alert(targetDiv.className);
+
+            if (targetDiv.className == "bookmark_unsaved") {
+                // Create a saved place
+
+                var url = '@Url.Content("~/")' + "SavedPlaces/SavePlace?PlaceId=" + placeId;
+                fetch(url);
+
+                targetDiv.classList.remove("bookmark_unsaved");
+                targetDiv.classList.add("bookmark_saved");
+            }
+
+            if (targetDiv.className == "bookmark_saved") {
+                // Delete a saved place
+
+                alert("Saved!")
+                
+            }
 
             //if (targetDiv.className.includes("bookmark_unsaved")) {
             //    alert("Unsaved!")

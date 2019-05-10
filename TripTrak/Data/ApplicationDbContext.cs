@@ -27,16 +27,16 @@ namespace TripTrak.Data
             base.OnModelCreating(modelBuilder);
 
             // Restrict deletion of related place when SavedPlace entry is removed
-            modelBuilder.Entity<Place>()
-                .HasMany(p => p.SavedPlaces)
-                .WithOne(l => l.Place)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<Place>()
+            //    .HasMany(p => p.SavedPlaces)
+            //    .WithOne(l => l.Place)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             // Restrict deletion of related User when SavedPlace entry is removed
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.SavedPlaces)
-                .WithOne(l => l.User)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .HasMany(u => u.SavedPlaces)
+            //    .WithOne(l => l.User)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             ApplicationUser user = new ApplicationUser
             {

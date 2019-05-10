@@ -49,7 +49,7 @@
                     <div class="right">
                         <form asp-controller="SavedPlaces" asp-action="RemovePlace">
                             <input type="hidden" name="id" asp-for="@item.Id" />
-                            <button type="submit" class="btn btn-link bookmark" title="Remove"><i class="fas fa-bookmark"></i></button>
+                            <button type="submit" class="btn btn-link bookmark_saved" title="Remove"><i class="fas fa-bookmark"></i></button>
                         </form>
                         @if (item.Place.Favorite == true)
                         {

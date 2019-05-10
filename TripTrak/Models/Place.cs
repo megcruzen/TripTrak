@@ -43,6 +43,6 @@ namespace TripTrak.Models
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
 
-        public virtual ICollection<SavedPlace> SavedPlaces { get; set; }
+        //public virtual ICollection<SavedPlace> SavedPlaces { get; set; }
     }
 }

@@ -264,12 +264,12 @@ button.accept-policy {
     color: #a1a1a1;
 }
 
-.bookmark {
+.bookmark_saved {
     color: #f4d35e;
     padding: 0;
 }
 
-.bookmark:hover {
+.bookmark_saved:hover {
     color: #db504a;
 }
 

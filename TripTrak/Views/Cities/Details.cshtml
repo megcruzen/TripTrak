@@ -8,131 +8,205 @@
     ViewData["Title"] = "Details";
 }
 
-@*@Html.DisplayFor(model => model.ImageUrl)*@
+@section Scripts {
+    <script type="text/javascript">
 
-@{string startDate = "";}
-@{string endDate = "";}
+        getStatus();
 
-@if (@Model.StartDate != null)
-{
-    startDate = Model.StartDate.Value.ToString("MMM d");
-}
+        function getStatus() {
 
-@if (@Model.EndDate != null)
-{
-    endDate = Model.EndDate.Value.ToString("MMM d");
-}
+            var targetDivs = document.querySelectorAll(".bookmark");
 
-<div class="d-flex justify-content-between flex-wrap mb-2">
-    <div class="deets">
-        <h1>@Html.DisplayFor(model => model.Name)</h1>
-        <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
-        <div>
-            @if (startDate == endDate)
-            {
-                <span><strong>Visited:</strong> @startDate</span>
-            }
-            else
-            {
-                <span><strong>Visited:</strong> @startDate - @endDate</span>
-            }
-        </div>
-        <div>
-            @if (Model.Notes != null)
-            {
-                <strong>Notes:</strong> @Html.DisplayFor(model => model.Notes)
-            }
-        </div>
-    </div>
-    @if (@UserManager.GetUserId(User) == Model.UserId)
-    {
-        <div class="text-center my-2 my-sm-0">
-            <a asp-controller="Places" asp-action="Create" asp-route-cityId="@Model.Id" class="btn btn-primary">Add Place</a>
-            <br />
-            <span class="small_links"><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a></span>
-        </div>
+            targetDivs.forEach(targetDiv => {
+                var placeId = targetDiv.id;
+                var url = '@Url.Content("~/")' + "SavedPlaces/GetSavedPlaces?PlaceId=" + placeId;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(placeInfo => {
+                        if (placeInfo.length > 0) {
+                            // add class="bookmark_saved"
+                            targetDiv.classList.add("bookmark_saved");
+                        }
+                        else {
+                            // add class="bookmark_saved"
+                            targetDiv.classList.add("bookmark_unsaved");
+                        }
+                    });
+            });
+        };
+
+        
+
+
+        //var className = "";
+
+        //fetch(url)
+        //    .then(response => response.json())
+        //    .then(placeInfo => {
+        //        if (placeInfo != undefined) {
+        //            className = "bookmark_saved";
+        //            //return className;
+        //            return <p>Yay!</p>
+        //        }
+        //        else {
+        //            className = "bookmark_unsaved";
+        //            return className;
+        //        }
+        //    }
+
+        //fetch(url, {
+        //    method: 'POST',
+        //    body: JSON.stringify(data), // data can be `string` or {object}!
+        //    headers: {
+        //        'Content-Type': 'application/json'
+        //    }
+        //}).then(res => res.json())
+        //    .then(response => console.log('Success:', JSON.stringify(response)))
+        //    .catch(error => console.error('Error:', error));
+
+
+
+        @*$(document).ready(function () {
+            $('#CategoryId').change(function () {
+                var url = '@Url.Content("~/")' + "SavedPlaces/GetSavedPlaces?PlaceId=" + $('#PlaceId').val();
+                var ddlsource = "#CategoryId";
+                $.getJSON(url, { CategoryId: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#SubcategoryId").empty();
+                    $.each(data, function (i, subcategory) {
+                        items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
+                    });
+                    $('#SubcategoryId').html(items);
+                });
+            });
+        });*@
+    </script>
     }
-</div>
 
-<hr />
 
-<div id="filter_btns" class="d-flex justify-content-between align-items-center flex-wrap">
-    <a asp-action="Details" asp-route-id="@Model.Id" class="btn_all"><img src="http://chrisandmeg.net/images/all_places.png" /> ALL</a>
-    <a asp-route-catId="1" class="btn1"><img src="http://chrisandmeg.net/images/eat_white.png" /> EAT</a>
-    <a asp-route-catId="2" class="btn2"><img src="http://chrisandmeg.net/images/stay_white.png" /> STAY</a>
-    <a asp-route-catId="3" class="btn3"><img src="http://chrisandmeg.net/images/do_white.png" /> DO</a>
-</div>
+    @*@Html.DisplayFor(model => model.ImageUrl)*@
 
-<div class="row places_container mt-4">
-    <div class="card-columns">
+    @{string startDate = "";}
+    @{string endDate = "";}
 
-        @foreach (var place in Model.Places)
+    @if (@Model.StartDate != null)
+    {
+        startDate = Model.StartDate.Value.ToString("MMM d");
+    }
+
+    @if (@Model.EndDate != null)
+    {
+        endDate = Model.EndDate.Value.ToString("MMM d");
+    }
+
+    <div class="d-flex justify-content-between flex-wrap mb-2">
+        <div class="deets">
+            <h1>@Html.DisplayFor(model => model.Name)</h1>
+            <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
+            <div>
+                @if (startDate == endDate)
+                {
+                    <span><strong>Visited:</strong> @startDate</span>
+                }
+                else
+                {
+                    <span><strong>Visited:</strong> @startDate - @endDate</span>
+                }
+            </div>
+            <div>
+                @if (Model.Notes != null)
+                {
+                    <strong>Notes:</strong> @Html.DisplayFor(model => model.Notes)
+                }
+            </div>
+        </div>
+        @if (@UserManager.GetUserId(User) == Model.UserId)
         {
-
-            <div class="card">
-                <div class="place_card d-flex justify-content-between">
-                    <div class="left pr-2">
-
-                        <div class="d-flex align-items-center mb-3">
-                            @if (place.Subcategory.IconUrl != "")
-                            {
-                                <img src="@place.Subcategory.IconUrl" width="30" class="mr-2" />
-                            }
-                            <h6 class="mb-0">@Html.DisplayFor(modelItem => place.Name)</h6>
-                        </div>
-
-
-                        @if (place.StartDate == place.EndDate)
-                        {
-                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate)</p>
-                        }
-                        else
-                        {
-                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate) - @Html.DisplayFor(modelItem => place.EndDate)</p>
-                        }
-
-                        @if (place.Location != null)
-                        {
-                            <p><strong>Location:</strong> @Html.DisplayFor(modelItem => place.Location)</p>
-                        }
-
-                        @if (place.Notes != null)
-                        {
-                            <p><strong>Notes:</strong> @Html.DisplayFor(modelItem => place.Notes)</p>
-                        }
-                    </div>
-
-                    <div class="right">
-                        @if (@UserManager.GetUserId(User) != Model.UserId)
-                        {
-                        <form asp-controller="SavedPlaces" asp-action="SavePlace">
-                            <input type="hidden" name="id" asp-for="@place.Id" />
-                            <input type="hidden" name="cityId" asp-for="@place.CityId" />
-                            <button type="submit" class="btn btn-link bookmark_unsaved" title="Save"><i class="fas fa-bookmark"></i></button>
-                        </form>
-                        }
-                        @if (place.Favorite == true)
-                        {
-                            <div class="text-danger"><i class="fas fa-heart"></i></div>
-                        }
-
-                        @if (place.PlaceUrl != null)
-                        {
-                            <div class="icon"><a href="@place.PlaceUrl" target="_blank"><i class="fas fa-link"></i></a></div>
-                        }
-
-                        @if (@UserManager.GetUserId(User) == Model.UserId)
-                        {
-                            <div class="icon">
-                                <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id"><i class="fas fa-edit"></i></a>
-                                <br />
-                                <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id"><i class="far fa-trash-alt"></i></a>
-                            </div>
-                        }
-                    </div>
-                </div>
+            <div class="text-center my-2 my-sm-0">
+                <a asp-controller="Places" asp-action="Create" asp-route-cityId="@Model.Id" class="btn btn-primary">Add Place</a>
+                <br />
+                <span class="small_links"><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a></span>
             </div>
         }
-
     </div>
-</div>
+
+    <hr />
+
+    <div id="filter_btns" class="d-flex justify-content-between align-items-center flex-wrap">
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn_all"><img src="http://chrisandmeg.net/images/all_places.png" /> ALL</a>
+        <a asp-route-catId="1" class="btn1"><img src="http://chrisandmeg.net/images/eat_white.png" /> EAT</a>
+        <a asp-route-catId="2" class="btn2"><img src="http://chrisandmeg.net/images/stay_white.png" /> STAY</a>
+        <a asp-route-catId="3" class="btn3"><img src="http://chrisandmeg.net/images/do_white.png" /> DO</a>
+    </div>
+
+    <div class="row places_container mt-4">
+        <div class="card-columns">
+
+            @foreach (var place in Model.Places)
+            {
+
+                <div class="card">
+                    <div class="place_card d-flex justify-content-between">
+                        <div class="left pr-2">
+
+                            <div class="d-flex align-items-center mb-3">
+                                @if (place.Subcategory.IconUrl != "")
+                                {
+                                    <img src="@place.Subcategory.IconUrl" width="30" class="mr-2" />
+                                }
+                                <h6 class="mb-0">@Html.DisplayFor(modelItem => place.Name)</h6>
+                            </div>
+
+
+                            @if (place.StartDate == place.EndDate)
+                            {
+                                <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate)</p>
+                            }
+                            else
+                            {
+                                <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate) - @Html.DisplayFor(modelItem => place.EndDate)</p>
+                            }
+
+                            @if (place.Location != null)
+                            {
+                                <p><strong>Location:</strong> @Html.DisplayFor(modelItem => place.Location)</p>
+                            }
+
+                            @if (place.Notes != null)
+                            {
+                                <p><strong>Notes:</strong> @Html.DisplayFor(modelItem => place.Notes)</p>
+                            }
+                        </div>
+
+                        <div class="right">
+
+                            <div class="bookmark" id="@place.Id">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
+
+                            @if (place.Favorite == true)
+                            {
+                                <div class="text-danger"><i class="fas fa-heart"></i></div>
+                            }
+
+                            @if (place.PlaceUrl != null)
+                            {
+                                <div class="icon"><a href="@place.PlaceUrl" target="_blank"><i class="fas fa-link"></i></a></div>
+                            }
+
+                            @if (@UserManager.GetUserId(User) == Model.UserId)
+                            {
+                                <div class="icon">
+                                    <a asp-controller="Places" asp-action="Edit" asp-route-id="@place.Id"><i class="fas fa-edit"></i></a>
+                                    <br />
+                                    <a asp-controller="Places" asp-action="Delete" asp-route-id="@place.Id"><i class="far fa-trash-alt"></i></a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>

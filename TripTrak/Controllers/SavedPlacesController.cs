@@ -38,6 +38,16 @@ namespace TripTrak.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<JsonResult> GetSavedPlaces(int PlaceId)
+        {
+            var user = await GetCurrentUserAsync();
+
+            var savedPlaces = _context.SavedPlace
+                .Where(p => p.PlaceId == PlaceId && p.UserId == user.Id).ToList();
+
+            return Json(savedPlaces);
+        }
+
         // GET: SavedPlaces/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -74,7 +84,6 @@ namespace TripTrak.Controllers
             {
                 _context.Add(savedPlace);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
                 return RedirectToAction("Details", "Cities", new { id = cityId });
             }
             return RedirectToAction(nameof(Index));

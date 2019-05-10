@@ -39,6 +39,8 @@ namespace TripTrak.Controllers
                 .Include(c => c.Trip)
                 .Include(c => c.Places)
                     .ThenInclude(p => p.Subcategory)
+                //.Include(c => c.Places)
+                //    .ThenInclude(p => p.SavedPlaces)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             // TO DO: Convert to .Join

@@ -35,10 +35,7 @@
                     });
             });
         };
-
         
-
-
         //var className = "";
 
         //fetch(url)
@@ -102,7 +99,8 @@
 
     <div class="d-flex justify-content-between flex-wrap mb-2">
         <div class="deets">
-            <h1>@Html.DisplayFor(model => model.Name)</h1>
+            @*<h1>@Html.DisplayFor(model => model.Name)</h1>*@
+            <div><strong>User:</strong> @Html.DisplayFor(model => model.User.FirstName)</div>
             <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
             <div>
                 @if (startDate == endDate)
@@ -181,9 +179,7 @@
 
                         <div class="right">
 
-                            <div class="bookmark" id="@place.Id">
-                                <i class="fas fa-bookmark"></i>
-                            </div>
+                            <div class="bookmark icon" id="@place.Id"><i class="fas fa-bookmark"></i></div>
 
                             @if (place.Favorite == true)
                             {

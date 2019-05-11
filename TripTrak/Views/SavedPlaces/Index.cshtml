@@ -16,6 +16,18 @@
 
         @foreach (var item in Model)
         {
+            string startDate = "";
+            string endDate = "";
+
+            if (item.Place.StartDate != null)
+            {
+                startDate = item.Place.StartDate.Value.ToString("MMM d, yyyy");
+            }
+
+            if (item.Place.EndDate != null)
+            {
+                endDate = item.Place.EndDate.Value.ToString("MMM d, yyyy");
+            }
 
             <div class="card">
                 <div class="place_card d-flex justify-content-between">
@@ -31,13 +43,18 @@
 
                         <p><strong>User:</strong> @item.Place.User.FullName</p>
 
-                        @if (item.Place.StartDate == item.Place.EndDate)
+                        <p><strong>City:</strong> <a asp-controller="Cities" asp-action="Details" asp-route-id="@item.Place.CityId">@item.Place.City.Name</a></p>
+
+                        @if (item.Place.StartDate != null && item.Place.EndDate != null)
                         {
-                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => item.Place.StartDate)</p>
-                        }
-                        else
-                        {
-                            <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => item.Place.StartDate) - @Html.DisplayFor(modelItem => item.Place.EndDate)</p>
+                            @if (item.Place.StartDate == item.Place.EndDate)
+                            {
+                                <p><strong>Visit Date:</strong> @startDate</p>
+                            }
+                            else
+                            {
+                                <p><strong>Visit Date:</strong> @startDate - @endDate</p>
+                            }
                         }
 
                         @if (item.Place.Location != null)

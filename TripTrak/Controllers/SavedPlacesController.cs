@@ -34,10 +34,13 @@ namespace TripTrak.Controllers
                     .ThenInclude(p => p.User)
                 .Include(s => s.Place)
                     .ThenInclude(p => p.Subcategory)
+                .Include(s => s.Place)
+                    .ThenInclude(p => p.City)
                 .Where(s => s.UserId == user.Id);
             return View(await applicationDbContext.ToListAsync());
         }
 
+        // GET: SavedPlaces/GetSavedPlaces
         public async Task<JsonResult> GetSavedPlaces(int PlaceId)
         {
             var user = await GetCurrentUserAsync();
@@ -48,25 +51,7 @@ namespace TripTrak.Controllers
             return Json(savedPlaces);
         }
 
-        // GET: SavedPlaces/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var savedPlace = await _context.SavedPlace
-        //        .Include(s => s.Place)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (savedPlace == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(savedPlace);
-        //}
-
+        // POST: SavedPlaces/SavePlace
         public async Task<JsonResult> SavePlace(int PlaceId)
         {
             // Get current user
@@ -83,50 +68,7 @@ namespace TripTrak.Controllers
             return Json(savedPlace);
         }
 
-        // POST: SavedPlaces/SavePlace
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> SavePlace(int id, int cityId)
-        //{
-        //    Get current user
-        //   var user = await GetCurrentUserAsync();
-
-        //    Create new saved place
-        //   SavedPlace savedPlace = new SavedPlace();
-        //    savedPlace.UserId = user.Id;
-        //    savedPlace.PlaceId = id;
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(savedPlace);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction("Details", "Cities", new { id = cityId });
-        //    }
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //// GET: SavedPlaces/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Name");
-        //    return View();
-        //}
-
-        //// POST: SavedPlaces/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,PlaceId,UserId")] SavedPlace savedPlace)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(savedPlace);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["PlaceId"] = new SelectList(_context.Place, "Id", "Name", savedPlace.PlaceId);
-        //    return View(savedPlace);
-        //}
-
+        // POST: SavedPlaces/UnsavePlace
         public async Task<JsonResult> UnsavePlace(int PlaceId)
         {
             // Get current user

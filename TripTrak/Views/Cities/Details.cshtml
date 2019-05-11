@@ -50,6 +50,7 @@
                 targetDiv.classList.remove("bookmark_unsaved");
                 targetDiv.classList.add("bookmark_saved");
             }
+            // Delete a saved place
             else {
                 var url = '@Url.Content("~/")' + "SavedPlaces/UnsavePlace?PlaceId=" + placeId;
                 fetch(url);
@@ -57,15 +58,6 @@
                 targetDiv.classList.remove("bookmark_saved");
                 targetDiv.classList.add("bookmark_unsaved");
             }
-
-            // Delete a saved place
-            @*if (targetDiv.className == "bookmark_saved") {
-                var url = '@Url.Content("~/")' + "SavedPlaces/UnsavePlace?PlaceId=" + placeId;
-                fetch(url);
-
-                targetDiv.classList.remove("bookmark_saved");
-                targetDiv.classList.add("bookmark_unsaved");
-            }*@
         };
     </script>
     }
@@ -73,32 +65,32 @@
 
     @*@Html.DisplayFor(model => model.ImageUrl)*@
 
-    @{string startDate = "";}
-    @{string endDate = "";}
+    @{string cityStartDate = "";}
+    @{string cityEndDate = "";}
 
     @if (@Model.StartDate != null)
     {
-        startDate = Model.StartDate.Value.ToString("MMM d");
+        cityStartDate = Model.StartDate.Value.ToString("MMM d, yyyy");
     }
 
     @if (@Model.EndDate != null)
     {
-        endDate = Model.EndDate.Value.ToString("MMM d");
+        cityEndDate = Model.EndDate.Value.ToString("MMM d, yyyy");
     }
 
     <div class="d-flex justify-content-between flex-wrap mb-2">
         <div class="deets">
             <h1>@Html.DisplayFor(model => model.Name)</h1>
             <div><strong>User:</strong> @Html.DisplayFor(model => model.User.FullName)</div>
-            <div><strong>Trip:</strong> @Html.DisplayFor(model => model.Trip.Name)</div>
+            <div><strong>Trip:</strong> <a asp-controller="Trips" asp-action="Details" asp-route-id="@Model.TripId">@Html.DisplayFor(model => model.Trip.Name)</a></div>
             <div>
-                @if (startDate == endDate)
+                @if (cityStartDate == cityEndDate)
                 {
-                    <span><strong>Visited:</strong> @startDate</span>
+                    <span><strong>Visited:</strong> @cityStartDate</span>
                 }
                 else
                 {
-                    <span><strong>Visited:</strong> @startDate - @endDate</span>
+                    <span><strong>Visited:</strong> @cityStartDate - @cityEndDate</span>
                 }
             </div>
             <div>
@@ -132,6 +124,18 @@
 
             @foreach (var place in Model.Places)
             {
+                string startDate = "";
+                string endDate = "";
+
+                if (place.StartDate != null)
+                {
+                    startDate = place.StartDate.Value.ToString("MMM d");
+                }
+
+                if (place.EndDate != null)
+                {
+                    endDate = place.EndDate.Value.ToString("MMM d");
+                }
 
                 <div class="card">
                     <div class="place_card d-flex justify-content-between">
@@ -145,14 +149,16 @@
                                 <h6 class="mb-0">@Html.DisplayFor(modelItem => place.Name)</h6>
                             </div>
 
-
-                            @if (place.StartDate == place.EndDate)
+                            @if (place.StartDate != null && place.EndDate != null)
                             {
-                                <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate)</p>
-                            }
-                            else
-                            {
-                                <p><strong>Visit Date:</strong> @Html.DisplayFor(modelItem => place.StartDate) - @Html.DisplayFor(modelItem => place.EndDate)</p>
+                                @if (place.StartDate == place.EndDate)
+                                {
+                                    <p><strong>Visit Date:</strong> @startDate</p>
+                                }
+                                else
+                                {
+                                    <p><strong>Visit Date:</strong> @startDate - @endDate</p>
+                                }
                             }
 
                             @if (place.Location != null)
@@ -168,7 +174,11 @@
 
                         <div class="right">
 
-                            <div class="bookmark_icon" id="@place.Id" onclick="toggleSaved(@place.Id)"><i class="fas fa-bookmark"></i></div>
+                            @if (@UserManager.GetUserId(User) != Model.UserId)
+                            {
+                                <div class="bookmark_icon" id="@place.Id" onclick="toggleSaved(@place.Id)"><i class="fas fa-bookmark"></i></div>
+                            }
+                                
 
                             @if (place.Favorite == true)
                             {

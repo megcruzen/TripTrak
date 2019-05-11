@@ -6,6 +6,11 @@
 
 <h1>Saved Places</h1>
 
+@if (Model.Count() < 1)
+{
+<div><em>No saved places.</em></div>
+}
+
 <div class="row places_container mt-4">
     <div class="card-columns">
 

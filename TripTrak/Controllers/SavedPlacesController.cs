@@ -127,6 +127,22 @@ namespace TripTrak.Controllers
         //    return View(savedPlace);
         //}
 
+        public async Task<JsonResult> UnsavePlace(int PlaceId)
+        {
+            // Get current user
+            var user = await GetCurrentUserAsync();
+
+            // Find saved place
+            var savedPlace = await _context.SavedPlace
+                .Where(p => p.PlaceId == PlaceId && p.UserId == user.Id)
+                .FirstOrDefaultAsync();
+
+            _context.Remove(savedPlace);
+            await _context.SaveChangesAsync();
+
+            return Json(savedPlace);
+        }
+
         // POST: SavedPlaces/RemovePlace/5
         [HttpPost, ActionName("RemovePlace")]
         [ValidateAntiForgeryToken]

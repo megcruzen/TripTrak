@@ -269,9 +269,13 @@ button.accept-policy {
     padding: 0;
 }
 
-.bookmark_saved:hover {
-    color: #db504a;
+.btn.bookmark_saved:hover {
+    color: #f4d35e;
 }
+
+/*.bookmark_saved:hover {
+    color: #db504a;
+}*/
 
 .bookmark_unsaved {
     color: #a1a1a1;
@@ -279,9 +283,9 @@ button.accept-policy {
     font-weight: normal;
 }
 
-.bookmark_unsaved:hover {
+/*.bookmark_unsaved:hover {
     color: #f4d35e;
-}
+}*/
 
 /* Friends
 -------------------------------------------------- */

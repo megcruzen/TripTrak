@@ -41,72 +41,32 @@
         function toggleSaved(placeId) {
 
             var targetDiv = document.getElementById(placeId);
-            //alert(targetDiv.className);
 
+            // Create a saved place
             if (targetDiv.className == "bookmark_unsaved") {
-                // Create a saved place
-
                 var url = '@Url.Content("~/")' + "SavedPlaces/SavePlace?PlaceId=" + placeId;
                 fetch(url);
 
                 targetDiv.classList.remove("bookmark_unsaved");
                 targetDiv.classList.add("bookmark_saved");
             }
+            else {
+                var url = '@Url.Content("~/")' + "SavedPlaces/UnsavePlace?PlaceId=" + placeId;
+                fetch(url);
 
-            if (targetDiv.className == "bookmark_saved") {
-                // Delete a saved place
-
-                alert("Saved!")
-                
+                targetDiv.classList.remove("bookmark_saved");
+                targetDiv.classList.add("bookmark_unsaved");
             }
 
-            //if (targetDiv.className.includes("bookmark_unsaved")) {
-            //    alert("Unsaved!")
-            //}
+            // Delete a saved place
+            @*if (targetDiv.className == "bookmark_saved") {
+                var url = '@Url.Content("~/")' + "SavedPlaces/UnsavePlace?PlaceId=" + placeId;
+                fetch(url);
+
+                targetDiv.classList.remove("bookmark_saved");
+                targetDiv.classList.add("bookmark_unsaved");
+            }*@
         };
-        
-        //var className = "";
-
-        //fetch(url)
-        //    .then(response => response.json())
-        //    .then(placeInfo => {
-        //        if (placeInfo != undefined) {
-        //            className = "bookmark_saved";
-        //            //return className;
-        //            return <p>Yay!</p>
-        //        }
-        //        else {
-        //            className = "bookmark_unsaved";
-        //            return className;
-        //        }
-        //    }
-
-        //fetch(url, {
-        //    method: 'POST',
-        //    body: JSON.stringify(data), // data can be `string` or {object}!
-        //    headers: {
-        //        'Content-Type': 'application/json'
-        //    }
-        //}).then(res => res.json())
-        //    .then(response => console.log('Success:', JSON.stringify(response)))
-        //    .catch(error => console.error('Error:', error));
-
-
-
-        @*$(document).ready(function () {
-            $('#CategoryId').change(function () {
-                var url = '@Url.Content("~/")' + "SavedPlaces/GetSavedPlaces?PlaceId=" + $('#PlaceId').val();
-                var ddlsource = "#CategoryId";
-                $.getJSON(url, { CategoryId: $(ddlsource).val() }, function (data) {
-                    var items = '';
-                    $("#SubcategoryId").empty();
-                    $.each(data, function (i, subcategory) {
-                        items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
-                    });
-                    $('#SubcategoryId').html(items);
-                });
-            });
-        });*@
     </script>
     }
 

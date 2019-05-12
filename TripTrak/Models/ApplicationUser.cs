@@ -35,6 +35,6 @@ namespace TripTrak.Models
 
 
         // Set up PK -> FK relationships to other objects
-        public virtual ICollection<SavedPlace> SavedPlaces { get; set; }
+        //public virtual ICollection<SavedPlace> SavedPlaces { get; set; }
     }
 }

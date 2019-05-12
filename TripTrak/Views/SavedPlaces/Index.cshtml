@@ -1,0 +1,91 @@
+﻿@model IEnumerable<TripTrak.Models.SavedPlace>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Saved Places</h1>
+
+@if (Model.Count() < 1)
+{
+<div><em>No saved places.</em></div>
+}
+
+<div class="row places_container mt-4">
+    <div class="card-columns">
+
+        @foreach (var item in Model)
+        {
+            string startDate = "";
+            string endDate = "";
+
+            if (item.Place.StartDate != null)
+            {
+                startDate = item.Place.StartDate.Value.ToString("MMM d, yyyy");
+            }
+
+            if (item.Place.EndDate != null)
+            {
+                endDate = item.Place.EndDate.Value.ToString("MMM d, yyyy");
+            }
+
+            <div class="card">
+                <div class="place_card d-flex justify-content-between">
+                    <div class="left pr-2">
+
+                        <div class="d-flex align-items-center mb-3">
+                            @if (item.Place.Subcategory.IconUrl != "")
+                            {
+                                <img src="@item.Place.Subcategory.IconUrl" width="30" class="mr-2" />
+                            }
+                            <h6 class="mb-0">@Html.DisplayFor(modelItem => item.Place.Name)</h6>
+                        </div>
+
+                        <p><strong>User:</strong> @item.Place.User.FullName</p>
+
+                        <p><strong>City:</strong> <a asp-controller="Cities" asp-action="Details" asp-route-id="@item.Place.CityId">@item.Place.City.Name</a></p>
+
+                        @if (item.Place.StartDate != null && item.Place.EndDate != null)
+                        {
+                            @if (item.Place.StartDate == item.Place.EndDate)
+                            {
+                                <p><strong>Visit Date:</strong> @startDate</p>
+                            }
+                            else
+                            {
+                                <p><strong>Visit Date:</strong> @startDate - @endDate</p>
+                            }
+                        }
+
+                        @if (item.Place.Location != null)
+                        {
+                            <p><strong>Location:</strong> @Html.DisplayFor(modelItem => item.Place.Location)</p>
+                        }
+
+                        @if (item.Place.Notes != null)
+                        {
+                            <p><strong>Notes:</strong> @Html.DisplayFor(modelItem => item.Place.Notes)</p>
+                        }
+                    </div>
+
+                    <div class="right">
+                        <form asp-controller="SavedPlaces" asp-action="RemovePlace">
+                            <input type="hidden" name="id" asp-for="@item.Id" />
+                            <button type="submit" class="btn btn-link bookmark_saved" title="Remove"><i class="fas fa-bookmark"></i></button>
+                        </form>
+                        @if (item.Place.Favorite == true)
+                        {
+                            <div class="text-danger"><i class="fas fa-heart"></i></div>
+                        }
+
+                        @if (item.Place.PlaceUrl != null)
+                        {
+                            <div class="icon"><a href="@item.Place.PlaceUrl" target="_blank"><i class="fas fa-link"></i></a></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

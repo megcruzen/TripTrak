@@ -13,70 +13,84 @@
 
 @foreach (var item in Model)
 {
-<div class="trip_card">
-    <div class="d-flex justify-content-between flex-wrap">
-        <div>
-            <h4>@Html.DisplayFor(modelItem => item.Name)</h4>
-            <div class="date-md">
-                @if (item.StartDate == item.EndDate)
-                {
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                }
-                else
-                {
-                    <span>@Html.DisplayFor(modelItem => item.StartDate) - @Html.DisplayFor(modelItem => item.EndDate)</span>
-                }
+
+    string tripStartDate = "";
+    string tripEndDate = "";
+
+    if (item.StartDate != null)
+    {
+        tripStartDate = item.StartDate.Value.ToString("MMM d, yyyy");
+    }
+
+    if (item.EndDate != null)
+    {
+        tripEndDate = item.EndDate.Value.ToString("MMM d, yyyy");
+    }
+
+    <div class="trip_card">
+        <div class="d-flex justify-content-between flex-wrap">
+            <div>
+                <h4>@Html.DisplayFor(modelItem => item.Name)</h4>
+                <div class="date-md">
+                    @if (tripStartDate == tripEndDate)
+                    {
+                        @tripStartDate
+                    }
+                    else
+                    {
+                        <span>@tripStartDate - @tripEndDate</span>
+                    }
+                </div>
+            </div>
+            <div class="text-center my-2 my-sm-0">
+                <a asp-controller="Cities" asp-action="Create" asp-route-tripId="@item.Id" class="btn btn-secondary btn-sm">Add City</a>
+                <br />
+                <span class="small_links"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></span>
             </div>
         </div>
-        <div class="text-center my-2 my-sm-0">
-            <a asp-controller="Cities" asp-action="Create" asp-route-tripId="@item.Id" class="btn btn-secondary btn-sm">Add City</a>
-            <br />
-            <span class="small_links"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></span>
+
+        <div class="notes col-12 col-sm-10 px-0">
+            @Html.DisplayFor(modelItem => item.Notes)
         </div>
-    </div>
 
-    <div class="notes col-12 col-sm-10 px-0">
-        @Html.DisplayFor(modelItem => item.Notes)
-    </div>
+        <div class="row cities_container">
+            @foreach (var city in item.Cities)
+            {
+                <div class="col-md-2 city_card">
+                    <a asp-controller="Cities" asp-action="Details" asp-route-id="@city.Id">
+                        <img src="@city.ImageUrl" />
+                        <div class="content">
+                            <h6>
+                                @Html.DisplayFor(modelItem => city.Name)
+                            </h6>
 
-    <div class="row cities_container">
-        @foreach (var city in item.Cities)
-        {
-            <div class="col-md-2 city_card">
-                <a asp-controller="Cities" asp-action="Details" asp-route-id="@city.Id">
-                    <img src="@city.ImageUrl" />
-                    <div class="content">
-                        <h6>
-                            @Html.DisplayFor(modelItem => city.Name)
-                        </h6>
+                            @{string startDate = "";}
+                            @{string endDate = "";}
 
-                        @{string startDate = "";}
-                        @{string endDate = "";}
-
-                        @if (@city.StartDate != null)
-                        {
-                            startDate = city.StartDate.Value.ToString("MMM d");
-                        }
-
-                        @if (@city.EndDate != null)
-                        {
-                            endDate = city.EndDate.Value.ToString("MMM d");
-                        }
-
-                        <div class="date-sm">
-                            @if (startDate == endDate)
+                            @if (@city.StartDate != null)
                             {
-                                <span>@startDate</span>
+                                startDate = city.StartDate.Value.ToString("MMM d");
                             }
-                            else
+
+                            @if (@city.EndDate != null)
                             {
-                                <span>@startDate - @endDate</span>
+                                endDate = city.EndDate.Value.ToString("MMM d");
                             }
+
+                            <div class="date-sm">
+                                @if (startDate == endDate)
+                                {
+                                    <span>@startDate</span>
+                                }
+                                else
+                                {
+                                    <span>@startDate - @endDate</span>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-        }
+                    </a>
+                </div>
+            }
+        </div>
     </div>
-</div>
 }

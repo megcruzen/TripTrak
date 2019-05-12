@@ -151,7 +151,7 @@ button.accept-policy {
 }
 
 .small_links {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .city_card {
@@ -190,6 +190,10 @@ button.accept-policy {
     .deets {
         width: 80%;
     }
+}
+
+.deets div {
+    font-size: 14px;
 }
 
 #filter_btns a {
@@ -246,7 +250,6 @@ button.accept-policy {
 .place_card {
     border: 1px solid #ddd;
     border-radius: 10px;
-    /*margin: 10px;*/
     padding: 10px;
 }
 
@@ -258,24 +261,37 @@ button.accept-policy {
 
 .right {
     width: 20px;
-    text-align: center;
 }
 
-.icon a {
+.icon a, .bookmark_icon {
     color: #a1a1a1;
+}
+
+.bookmark_saved {
+    color: #f4d35e;
+    padding: 0 0 0 2px;
+}
+
+.btn.bookmark_saved:hover {
+    color: #f4d35e;
+}
+
+.bookmark_unsaved {
+    color: #a1a1a1;
+    padding: 0 0 0 2px;
+    font-weight: normal;
 }
 
 /* Friends
 -------------------------------------------------- */
-
-.friends_cities a {
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    font-size: 12px;
-    margin: 3px 3px 3px 0px;
-    padding: 5px 10px;
-    text-align: center;
-}
+    .friends_cities a {
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: 12px;
+        margin: 3px 3px 3px 0px;
+        padding: 5px 10px;
+        text-align: center;
+    }
 
 .friends_cities a:hover {
     background-color: #067bc2;

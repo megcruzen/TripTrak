@@ -16,11 +16,11 @@ namespace TripTrak.Models
 
         public string Location { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MMM d, yyyy}")]
+        //[DisplayFormat(DataFormatString = "{0:MMM d, yyyy}")]
         [Display(Name = "Start Date")]
         public DateTime? StartDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:MMM d, yyyy}")]
+        //[DisplayFormat(DataFormatString = "{0:MMM d, yyyy}")]
         [Display(Name = "End Date")]
         public DateTime? EndDate { get; set; }
 
@@ -41,7 +41,8 @@ namespace TripTrak.Models
 
         [Required]
         public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
 
-        public virtual ICollection<SavedPlace> SavedPlaces { get; set; }
+        //public virtual ICollection<SavedPlace> SavedPlaces { get; set; }
     }
 }

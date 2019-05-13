@@ -284,14 +284,21 @@ button.accept-policy {
 
 /* Friends
 -------------------------------------------------- */
-    .friends_cities a {
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        font-size: 12px;
-        margin: 3px 3px 3px 0px;
-        padding: 5px 10px;
-        text-align: center;
-    }
+
+.request_container td {
+    background-color: #FAF1D3;
+    min-width: 100px;
+    padding: 10px 20px;
+}
+
+.friends_cities a {
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 12px;
+    margin: 3px 3px 3px 0px;
+    padding: 5px 10px;
+    text-align: center;
+}
 
 .friends_cities a:hover {
     background-color: #067bc2;

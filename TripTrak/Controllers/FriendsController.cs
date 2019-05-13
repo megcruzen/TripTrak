@@ -73,7 +73,7 @@ namespace TripTrak.Controllers
             var filteredUsers = users.Except(friends);
 
             // Search query
-            filteredUsers = filteredUsers.Where(u => u.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+            filteredUsers = filteredUsers.Where(u => u.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase) || u.UserName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
             return View(filteredUsers);
         }
 

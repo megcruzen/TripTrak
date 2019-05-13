@@ -9,6 +9,10 @@ namespace TripTrak.Models
     {
         public ApplicationUser() { }
 
+        //[Required]
+        //[Display(Name = "Username")]
+        //public string UserName { get; set; }
+
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -26,10 +30,6 @@ namespace TripTrak.Models
             }
         }
 
-        [Required]
-        [Display(Name = "Username")]
-        public string DisplayName { get; set; }
-        
         public List<Trip> TripList { get; set; } = new List<Trip>();
         
     }

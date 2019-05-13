@@ -42,9 +42,8 @@ namespace TripTrak.Data
             {
                 FirstName = "Megan",
                 LastName = "Cruzen",
-                DisplayName = "megcruzen",
-                UserName = "megcruzen@gmail.com",
-                NormalizedUserName = "MEGCRUZEN@GMAIL.COM",
+                UserName = "megcruzen",
+                NormalizedUserName = "MEGCRUZEN",
                 Email = "megcruzen@gmail.com",
                 NormalizedEmail = "megcruzen@gmail.com",
                 EmailConfirmed = true,

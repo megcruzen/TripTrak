@@ -8,23 +8,36 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="d-flex justify-content-between flex-wrap">
+@{string tripStartDate = ""; }
+@{string tripEndDate = ""; }
+
+@if (Model.StartDate != null)
+{
+    tripStartDate = Model.StartDate.Value.ToString("MMM d, yyyy");
+}
+
+@if (Model.EndDate != null)
+{
+    tripEndDate = Model.EndDate.Value.ToString("MMM d, yyyy");
+}
+
+<div class="d-flex justify-content-between flex-wrap align-items-center">
     <div>
         <h1>@Html.DisplayFor(model => model.Name)</h1>
-        <div class="date-md">
-            @if (Model.StartDate == Model.EndDate)
+        <div class="font14">
+            @if (tripStartDate == tripEndDate)
             {
-                @Html.DisplayFor(modelItem => Model.StartDate)
+                @tripStartDate
             }
             else
             {
-                <span>@Html.DisplayFor(modelItem => Model.StartDate) - @Html.DisplayFor(modelItem => Model.EndDate)</span>
+                <span>@tripStartDate - @tripEndDate</span>
             }
         </div>
     </div>
     @if (@UserManager.GetUserId(User) == Model.UserId)
-    { 
-        <div class="text-center my-2 my-sm-0">
+    {
+        <div class="my-2 my-sm-0">
             <a asp-controller="Cities" asp-action="Create" asp-route-tripId="@Model.Id" class="btn btn-secondary btn-sm">Add City</a>
             <br />
             <span class="small_links"><a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a></span>

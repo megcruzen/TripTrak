@@ -1,4 +1,4 @@
-﻿@model TripTrak.Models.ApplicationUser;
+﻿@model TripTrak.Models.ViewModels.HomeViewModel;
 @using Microsoft.AspNetCore.Identity
 
 @inject SignInManager<ApplicationUser> SignInManager
@@ -9,13 +9,57 @@
 }
 
 <div class="text-center my-5">
-    <h3>Welcome, @Model.FirstName!</h3>
+    <h3>Welcome, @Model.CurrentUser.FirstName!</h3>
 </div>
 
-<h5>Friend Requests</h5>
-<table class="table">
-    <tbody>
-        @await Component.InvokeAsync("FriendRequests")
-        @await Component.InvokeAsync("PendingRequests")
-    </tbody>
-</table>
+@if (Model.ReceivedRequests.Count() > 0 || Model.SentRequests.Count() > 0)
+{
+    <div class="request_container">
+        <h5 class="pt-1">Friend Requests</h5>
+        <table class="table-borderless">
+            <tbody>
+                @*@await Component.InvokeAsync("FriendRequests")
+                    @await Component.InvokeAsync("PendingRequests")*@
+
+                @foreach (var friendship in Model.ReceivedRequests)
+                {
+                    <tr>
+                        <td>
+                            @friendship.FriendA.FullName
+                        </td>
+                        <td class="text-center">
+                            <form asp-controller="Friends" asp-action="AcceptRequest">
+                                <input type="hidden" name="id" asp-for="@friendship.Id" />
+                                <input type="submit" value="Accept" class="btn btn-sm btn-primary" />
+                            </form>
+                        </td>
+                        <td class="text-right">
+                            <form asp-controller="Friends" asp-action="DeleteRequest">
+                                <input type="hidden" name="id" asp-for="@friendship.Id" />
+                                <input type="submit" value="Ignore" class="btn btn-sm btn-cancel" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+
+                @foreach (var friendship in Model.SentRequests)
+                {
+                    <tr>
+                        <td>
+                            @friendship.FriendB.FullName
+                        </td>
+                        <td class="text-center">
+                            <span class="font14"><em>Pending</em></span>
+                        </td>
+                        <td class="text-right">
+                            <form asp-controller="Friends" asp-action="DeleteRequest">
+                                <input type="hidden" name="id" asp-for="@friendship.Id" />
+                                <input type="submit" value="Cancel" class="btn btn-sm btn-cancel" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

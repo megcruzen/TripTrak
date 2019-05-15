@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TripTrak.Data;
 using TripTrak.Models;
+using TripTrak.Models.ViewModels;
 
 namespace TripTrak.Controllers
 {
@@ -25,13 +27,33 @@ namespace TripTrak.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(HomeViewModel viewModel)
         {
             var currentUser = await GetCurrentUserAsync();
             var user = _context.ApplicationUsers
                 .Where(u => u.Id == currentUser.Id)
                 .FirstOrDefault();
-            return View(user);
+
+            var received = (await _context.Friend
+               .Include(f => f.FriendA)
+               .Include(f => f.FriendB)
+               .Where(f => f.FriendBId == user.Id && f.Status == "pending")
+               .ToListAsync());
+
+            var sent = (await _context.Friend
+               .Include(f => f.FriendA)
+               .Include(f => f.FriendB)
+               .Where(f => f.FriendAId == user.Id && f.Status == "pending")
+               .ToListAsync());
+
+            viewModel = new HomeViewModel()
+            {
+                CurrentUser = user,
+                SentRequests = sent,
+                ReceivedRequests = received
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

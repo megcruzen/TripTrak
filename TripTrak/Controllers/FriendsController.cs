@@ -27,14 +27,28 @@ namespace TripTrak.Controllers
 
 
         // GET: Friends
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(FriendsViewModel viewModel)
         {
             // Get current user
             var user = await GetCurrentUserAsync();
 
+            //var friends = (await _context.Friend
+            //    .Include(f => f.FriendA)
+            //        .ThenInclude(fA => fA.TripList)
+            //            .ThenInclude(t => t.Cities)
+            //    .Include(f => f.FriendB)
+            //        .ThenInclude(fB => fB.TripList)
+            //            .ThenInclude(t => t.Cities)
+            //    .Where(f => (f.FriendAId == user.Id || f.FriendBId == user.Id) && f.Status == "accepted")
+            //    .ToListAsync())
+            //    .Select(f => f.FriendA.Id == user.Id ? f.FriendB : f.FriendA);
+
+            //return View(friends);
+
             var friends = (await _context.Friend
                 .Include(f => f.FriendA)
-                    .ThenInclude(fA => fA.TripList)
+                    .ThenInclude(fA => fA.TripList) //.OrderByDescending(t => t.StartDate)
                         .ThenInclude(t => t.Cities)
                 .Include(f => f.FriendB)
                     .ThenInclude(fB => fB.TripList)
@@ -43,8 +57,29 @@ namespace TripTrak.Controllers
                 .ToListAsync())
                 .Select(f => f.FriendA.Id == user.Id ? f.FriendB : f.FriendA);
 
-            return View(friends);
+            var received = (await _context.Friend
+               .Include(f => f.FriendA)
+               .Include(f => f.FriendB)
+               .Where(f => f.FriendBId == user.Id && f.Status == "pending")
+               .ToListAsync());
+
+            var sent = (await _context.Friend
+               .Include(f => f.FriendA)
+               .Include(f => f.FriendB)
+               .Where(f => f.FriendAId == user.Id && f.Status == "pending")
+               .ToListAsync());
+
+            viewModel = new FriendsViewModel()
+            {
+                CurrentFriends = friends.ToList(),
+                SentRequests = sent,
+                ReceivedRequests = received
+            };
+
+            return View(viewModel);
         }
+
+
 
         // GET: Friends/FriendSearch
         public async Task<IActionResult> FriendSearch(string searchString)

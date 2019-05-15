@@ -31,7 +31,7 @@
         <div class="d-flex justify-content-between flex-wrap">
             <div>
                 <h4>@Html.DisplayFor(modelItem => item.Name)</h4>
-                <div class="date-md">
+                <div class="font14">
                     @if (tripStartDate == tripEndDate)
                     {
                         @tripStartDate
@@ -42,7 +42,7 @@
                     }
                 </div>
             </div>
-            <div class="text-center my-2 my-sm-0">
+            <div class="my-2 my-sm-0">
                 <a asp-controller="Cities" asp-action="Create" asp-route-tripId="@item.Id" class="btn btn-secondary btn-sm">Add City</a>
                 <br />
                 <span class="small_links"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | <a asp-action="Delete" asp-route-id="@item.Id">Delete</a></span>

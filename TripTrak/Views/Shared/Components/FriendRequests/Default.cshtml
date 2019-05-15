@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<TripTrak.Models.Friend>
 
-@*<h3>Friend Requests</h3>
-<table class="table">
-    <tbody>*@
-
         @foreach (var friendship in Model)
     {
         <tr>
@@ -24,6 +20,3 @@
             </td>
         </tr>
     }
-
-    @*</tbody>
-</table>*@

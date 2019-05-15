@@ -18,7 +18,7 @@ a.navbar-brand {
 
 /* PRIMARY */
 .btn-primary { background-color: #00a676; }
-.text-primary { color: #00a676; }
+.text-primary { color: #00a676 !important; }
 .btn-primary:focus, .btn-primary:hover, .btn-primary:active, .show > .btn-primary.dropdown-toggle {
     color: #fff;
     background-color: #005B41 !important;
@@ -34,7 +34,7 @@ button.btn-primary:not(:disabled):not(.disabled):active {
 
 /* SECONDARY */
 .btn-secondary { background-color: #da4167; }
-.text-secondary {  color: #da4167; }
+.text-secondary {  color: #da4167 !important; }
 .btn-secondary:focus, .btn-secondary:hover, .btn-secondary:active, .show > .btn-secondary.dropdown-toggle {
     color: #fff;
     background-color: #8b1e3f !important;
@@ -109,9 +109,22 @@ button.accept-policy {
     border: 0;
 }
 
+/*#dropdownMenu1:hover {
+    color: #fff !important;
+}*/
+
+/*.dropdown {
+    margin: 3px 10px;
+}*/
+
+a.dropdown-item:focus, button.dropdown-item:focus {
+    background-color: #ced4da !important;
+    color: #212529;
+    outline: none !important;
+}
+
 /* Layout
 -------------------------------------------------- */
-
 #login {
     margin: 0 auto;
     margin-top: 50px;
@@ -284,14 +297,21 @@ button.accept-policy {
 
 /* Friends
 -------------------------------------------------- */
-    .friends_cities a {
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        font-size: 12px;
-        margin: 3px 3px 3px 0px;
-        padding: 5px 10px;
-        text-align: center;
-    }
+
+.request_container td {
+    background-color: #FAF1D3;
+    min-width: 100px;
+    padding: 10px 20px;
+}
+
+.friends_cities a {
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 12px;
+    margin: 3px 3px 3px 0px;
+    padding: 5px 10px;
+    text-align: center;
+}
 
 .friends_cities a:hover {
     background-color: #067bc2;

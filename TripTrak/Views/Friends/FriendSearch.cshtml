@@ -25,6 +25,9 @@
                 @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
                 <form asp-controller="Friends" asp-action="AddFriend">
                     <input type="hidden" name="id" asp-for="@item.Id" />
                     <input type="submit" value="Send Friend Request" class="btn btn-primary" />

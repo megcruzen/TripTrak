@@ -6,16 +6,32 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using TripTrak.Data;
 using TripTrak.Models;
 
 namespace TripTrak.Controllers
 {
     public class HomeController : Controller
     {
-        [Authorize]
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            return View();
+            _context = context;
+            _userManager = userManager;
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            var currentUser = await GetCurrentUserAsync();
+            var user = _context.ApplicationUsers
+                .Where(u => u.Id == currentUser.Id)
+                .FirstOrDefault();
+            return View(user);
         }
 
         public IActionResult Privacy()

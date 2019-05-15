@@ -1,11 +1,15 @@
 ﻿@model TripTrak.Models.ApplicationUser;
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1>Welcome, @User.Identity.Name!</h1>
+<div class="text-center my-5">
+    <h3>Welcome, @Model.FirstName!</h3>
 </div>
 
 <h5>Friend Requests</h5>
